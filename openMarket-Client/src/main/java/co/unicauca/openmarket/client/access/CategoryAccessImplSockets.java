@@ -30,7 +30,9 @@ import java.util.logging.Logger;
 public class CategoryAccessImplSockets implements ICategoryAccess {
 
      private OpenMarketSocket mySocket;
-    
+     public CategoryAccessImplSockets() {
+        mySocket = new OpenMarketSocket();
+    }
     //private Connection conn;
 
     @Override
