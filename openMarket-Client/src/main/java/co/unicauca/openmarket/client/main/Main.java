@@ -1,16 +1,21 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package co.unicauca.openmarket.client.main;
 
 import co.unicauca.openmarket.client.access.Factory;
 import co.unicauca.openmarket.client.access.ICategoryAccess;
+import co.unicauca.openmarket.client.access.IProductAccess;
 import co.unicauca.openmarket.client.domain.service.CategoryService;
 import co.unicauca.openmarket.client.domain.service.ProductService;
 import co.unicauca.openmarket.client.presentation.GUICategory;
 import co.unicauca.openmarket.client.presentation.GUIProducts;
-import co.unicauca.openmarket.client.access.IProductAccess;
 
 /**
  *
- * @author Libardo Pantoja
+ * @author brayan
  */
 public class Main {
 
