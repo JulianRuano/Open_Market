@@ -4,17 +4,120 @@
  * and open the template in the editor.
  */
 package co.unicauca.openmarket.server.infra.tcpip;
-package co.unicauca.openmarket.domain.services;
+import co.unicauca.openmarket.client.domain.Category;
+import co.unicauca.openmarket.commons.infra.Protocol;
+import co.unicauca.openmarket.domain.services.CategoryService;
+import co.unicauca.strategyserver.infra.ServerHandler;
+import co.unicauca.openmarket.commons.infra.JsonError;
+import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 
 /**
  *
  * @author brayan
  */
-public class OpenMarketHandler {
+public class OpenMarketHandler extends ServerHandler {
+    /**
+     * Servicio de categoria
+     */
+    private static CategoryService service;
     
+    public OpenMarketHandler() {
+    }
+
+    /**
+     * Procesar la solicitud que proviene de la aplicación cliente
+     *
+     */
+    @Override
+    public String processRequest(String requestJson) {
+        // Convertir la solicitud a objeto Protocol para poderlo procesar
+        Gson gson = new Gson();  
+        Protocol protocolRequest;
+        protocolRequest = gson.fromJson(requestJson, Protocol.class);
+        String response="";
+        switch (protocolRequest.getResource()) {
+            case "customer":
+                if (protocolRequest.getAction().equals("get")) {
+                    // Consultar un customer
+                    response = processGetCategory(protocolRequest);
+                }
+
+                if (protocolRequest.getAction().equals("post")) {
+                    // Agregar un customer    
+                    response = processGetCategory(protocolRequest);
+
+                }
+                break;
+        }
+        return response;
+    }
     
-    public void setService(CustomerService service) {
+    /**
+     * Procesa la solicitud de consultar una categoria
+     *
+     * @param protocolRequest Protocolo de la solicitud
+     */
+    private String processGetCategory(Protocol protocolRequest) {
+        // Extraer la cedula del primer parámetro
+        Long id = Long.parseLong(protocolRequest.getParameters().get(0).getValue()) ;
+        Category category = service.findById(id);
+        if (category == null) {
+            String errorJson = generateNotFoundErrorJson();
+            return errorJson;
+        } else {
+            return objectToJSON(category);
+        }
+    }
+    
+    /**
+     * Procesa la solicitud de agregar una categoria
+     *
+     * @param protocolRequest Protocolo de la solicitud
+     */
+    private boolean processPostCategory(Protocol protocolRequest) {
+        Category category = new Category();
+        // Reconstruir el customer a partid de lo que viene en los parámetros
+        category.setName(protocolRequest.getParameters().get(0).getValue());
+        boolean response = getService().save(category);
+        return response;
+    }
+    
+    /**
+     * Genera un ErrorJson de cliente no encontrado
+     *
+     * @return error en formato json
+     */
+    private String generateNotFoundErrorJson() {
+        List<JsonError> errors = new ArrayList<>();
+        JsonError error = new JsonError();
+        error.setCode("404");
+        error.setError("NOT_FOUND");
+        error.setMessage("Categoria no encontrada. ID no existe");
+        errors.add(error);
+
+        Gson gson = new Gson();
+        String errorsJson = gson.toJson(errors);
+
+        return errorsJson;
+    }
+    
+     /**
+     * @return the service
+     */
+    public CategoryService getService() {
+        return service;
+    }
+    /**
+     * @param service the service to set
+     */
+    public void setService(CategoryService service) {
         this.service = service;
     } 
+    
+   
 }

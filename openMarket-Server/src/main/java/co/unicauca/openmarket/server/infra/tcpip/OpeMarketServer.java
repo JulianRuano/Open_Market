@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package co.unicauca.openmarket.server.infra.tcpip;
+import co.unicauca.openmarket.client.access.CategoryRepository;
+import co.unicauca.openmarket.domain.services.CategoryService;
 import co.unicauca.strategyserver.infra.ServerSocketMultiThread;
 import java.util.Scanner;
 
@@ -22,7 +24,7 @@ public class OpeMarketServer {
         int port = teclado.nextInt();
         ServerSocketMultiThread myServer = new ServerSocketMultiThread(port);
         OpenMarketHandler myHandler = new OpenMarketHandler();
-        myHandler.setService(new CustomerService(new CustomerRepositoryImplArrays()));
+        myHandler.setService(null);
         myServer.setServerHandler(myHandler);
         myServer.startServer();
     }
