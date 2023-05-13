@@ -8,6 +8,7 @@ package co.unicauca.openmarket.client.presentation;
 
 import co.unicauca.openmarket.client.domain.Category;
 import co.unicauca.openmarket.client.domain.service.CategoryService;
+import static co.unicauca.openmarket.client.infra.Messages.successMessage;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -191,8 +192,10 @@ public class GUICategoriesFind extends javax.swing.JDialog {
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
           try{
                if(this.rdoId.isSelected()==true){
-               
-                  fillTableId(categoryService.findCategoryById(Long.valueOf(this.txtSearch.getText())) );
+                   
+                       fillTableId(categoryService.findCategoryById(Long.valueOf(this.txtSearch.getText())) );
+                  
+                        
                  }else{
                    fillTableName (categoryService.findCategoriesByName(this.txtSearch.getText())); 
              }
@@ -206,6 +209,7 @@ public class GUICategoriesFind extends javax.swing.JDialog {
                 "Seleccione por el dato que quiere buscar",
                 "Error al introducir el dato",
                 JOptionPane.ERROR_MESSAGE);
+                successMessage(e.getMessage(), "Atención"); 
           }
             
       
