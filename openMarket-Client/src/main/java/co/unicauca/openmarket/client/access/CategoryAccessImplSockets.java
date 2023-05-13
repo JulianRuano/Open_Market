@@ -8,8 +8,10 @@ package co.unicauca.openmarket.client.access;
 
 import co.unicauca.openmarket.client.domain.Category;
 import co.unicauca.openmarket.client.infra.OpenMarketSocket;
+import co.unicauca.openmarket.commons.infra.JsonError;
 import co.unicauca.openmarket.commons.infra.Protocol;
 import com.google.gson.Gson;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,8 +34,35 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
     //private Connection conn;
 
     @Override
-    public boolean save(Category newCategory) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean save(Category newCategory) throws Exception  {
+        boolean bandera=false;
+        String jsonResponse = null;
+        String requestJson = doSaveCategoryRequestJson(newCategory);
+        try {
+            mySocket.connect();
+            jsonResponse = mySocket.sendRequest(requestJson);
+            mySocket.disconnect();
+
+        } catch (IOException ex) {
+            Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, "No hubo conexión con el servidor", ex);
+        }
+         if (jsonResponse == null) {
+            throw new Exception("No se pudo conectar con el servidor. Revise la red o que el servidor esté escuchando. ");
+        } else {
+            if (jsonResponse.contains("error")) {
+                //Devolvió algún error
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
+                throw new Exception(extractMessages(jsonResponse));
+               
+            } else {
+                //Encontró el customer
+                
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+newCategory.getCategoryId().toString()+ ")");
+                bandera=true;
+            }
+        }
+      
+       return bandera;
     }
 
     @Override
@@ -48,7 +77,33 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
 
     @Override
     public Category findById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String jsonResponse = null;
+        String requestJson = doFindCategoyIdRequestJson(id);
+        System.out.println(requestJson);
+        try {
+            mySocket.connect();
+            jsonResponse = mySocket.sendRequest(requestJson);
+            mySocket.disconnect();
+
+        } catch (IOException ex) {
+            Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, "No hubo conexión con el servidor", ex);
+        }
+        if (jsonResponse == null) {
+            return null;
+           // throw new Exception("No se pudo conectar con el servidor. Revise la red o que el servidor esté escuchando. ");
+        } else {
+            if (jsonResponse.contains("error")) {
+                //Devolvió algún error
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
+               // throw new Exception(extractMessages(jsonResponse));
+               return null;
+            } else {
+                //Encontró el category
+                Category category = jsonToCategory(jsonResponse);
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+jsonResponse.toString()+ ")");
+                return category;
+            }
+        }     
     }
 
     @Override
@@ -57,31 +112,67 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
     }
 
     @Override
-    public List<Category> findByName(String name) {
+    public List<Category> findByName(String name){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-     /**
-     * Crea la solicitud json de creación del customer para ser enviado por el
+    
+    
+    private String extractMessages(String jsonResponse) {
+        JsonError[] errors = jsonToErrors(jsonResponse);
+        String msjs = "";
+        for (JsonError error : errors) {
+            msjs += error.getMessage();
+        }
+        return msjs;
+    }
+
+    /**
+     * Convierte el jsonError a un array de objetos jsonError
+     *
+     * @param jsonError
+     * @return objeto MyError
+     */
+    private JsonError[] jsonToErrors(String jsonError) {
+        Gson gson = new Gson();
+        JsonError[] error = gson.fromJson(jsonError, JsonError[].class);
+        return error;
+    }
+    /**
+     * Crea una solicitud json para ser enviada por el socket
+     *
+     *
+     * @param categoryId identificación del cliente
+     * @return solicitud de consulta del cliente en formato Json, algo como:
+     * {"resource":"category","action":"get","parameters":[{"name":"id","value":"1"}]}
+     */
+    private String doFindCategoyIdRequestJson(Long categoryId) {
+
+        Protocol protocol = new Protocol();
+        protocol.setResource("category");
+        protocol.setAction("get");
+        protocol.addParameter("categoryId", categoryId.toString());
+
+        Gson gson = new Gson();
+        String requestJson = gson.toJson(protocol);
+
+        return requestJson;
+    }
+    /**
+     * Crea la solicitud json de creación de la Category para ser enviado por el
      * socket
      *
      * @param customer objeto customer
      * @return devulve algo como:
-     * {"resource":"customer","action":"post","parameters":[{"name":"id","value":"980000012"},{"name":"fistName","value":"Juan"},...}]}
+     * {"resource":"category","action":"post","parameters":[{"name":"id","value":"1"},{"name":"name","value":"lacteos"},...}]}
      */
-    private String doCreateCustomerRequestJson(Category category) {
+    private String doSaveCategoryRequestJson(Category category) {
 
         Protocol protocol = new Protocol();
         protocol.setResource("category");
         protocol.setAction("post");
-        /*
-        protocol.addParameter("id", customer.getId());
-        protocol.addParameter("fistName", customer.getFirstName());
-        protocol.addParameter("lastName", customer.getLastName());
-        protocol.addParameter("address", customer.getAddress());
-        protocol.addParameter("email", customer.getEmail());
-        protocol.addParameter("gender", customer.getGender());
-        protocol.addParameter("mobile", customer.getMobile());
-    */
+       
+        protocol.addParameter("name", category.getName());
+       
         Gson gson = new Gson();
         String requestJson = gson.toJson(protocol);
         return requestJson;

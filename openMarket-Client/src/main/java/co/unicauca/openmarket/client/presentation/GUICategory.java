@@ -8,6 +8,7 @@ package co.unicauca.openmarket.client.presentation;
 import co.unicauca.openmarket.client.domain.Category;
 import co.unicauca.openmarket.client.domain.service.CategoryService;
 import co.unicauca.openmarket.client.infra.Messages;
+import static co.unicauca.openmarket.client.infra.Messages.successMessage;
 import javax.swing.JOptionPane;
 
 /**
@@ -349,14 +350,19 @@ public class GUICategory extends javax.swing.JFrame {
     
     //agregar Categorias
     private void addCategory() {
-      String name=this.txtNombre.getText().trim();
-      if(categoryService.saveCategory(name)){
-          Messages.showMessageDialog("Se grabo con exito","Atencion");
-          cleanControls();
-          stateInitial();
-      }else{
-          Messages.showMessageDialog("Error al grabar, lo siento mucho","Atencion");
-      }
+        try{
+            String name=this.txtNombre.getText().trim();
+            if(categoryService.saveCategory(name)){
+                Messages.showMessageDialog("Se grabo con exito","Atencion");
+                cleanControls();
+                stateInitial();
+            }else{
+                Messages.showMessageDialog("Error al grabar, lo siento mucho","Atencion");
+            }
+        }catch(Exception ex){
+           successMessage(ex.getMessage(), "Atención");   
+        }
+     
     }
     //editar categorias
     private void editCategory() {
