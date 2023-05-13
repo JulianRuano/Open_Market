@@ -7,6 +7,9 @@ package co.unicauca.openmarket.client.access;
 
 
 import co.unicauca.openmarket.client.domain.Category;
+import co.unicauca.openmarket.client.infra.OpenMarketSocket;
+import co.unicauca.openmarket.commons.infra.Protocol;
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -24,192 +27,81 @@ import java.util.logging.Logger;
  */
 public class CategoryAccessImplSockets implements ICategoryAccess {
 
-    private Connection conn;
-
-    public CategoryAccessImplSockets() {
-        initDatabase();
-    }
+     private OpenMarketSocket mySocket;
+    
+    //private Connection conn;
 
     @Override
     public boolean save(Category newCategory) {
-        try {
-            if (newCategory == null || newCategory.getName().isBlank()) {
-                return false;
-            }
-            String sql = "INSERT INTO categories ( name) "
-                    + "VALUES ( ?)";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newCategory.getName());
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-    }
-
-    private void initDatabase() {
-        // SQL statement for creating a new table
-
-        String sql = "CREATE TABLE IF NOT EXISTS categories (\n"
-                + "      categoryId integer PRIMARY KEY AUTOINCREMENT,\n"
-                + "      name text NOT NULL\n"
-                + ");";
-        try {
-            this.connect();
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
-            //this.disconnect();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void connect() {
-        // SQLite connection string
-        //String url = "jdbc:sqlite:./myDatabase.db"; //Para Linux/Mac
-        //String url = "jdbc:sqlite:C:/sqlite/db/myDatabase.db"; //Para Windows
-        String url = "jdbc:sqlite::memory:";
-
-        try {
-            conn = DriverManager.getConnection(url);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
- public boolean clearCategories() {
-    try {
-        String sql = "DELETE FROM categories";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.executeUpdate();
-
-        // Reset AUTOINCREMENT value for categoryId
-        String resetSql = "UPDATE SQLITE_SEQUENCE SET seq = 0 WHERE name = 'categories'";
-        PreparedStatement pstmtReset = conn.prepareStatement(resetSql);
-        pstmtReset.executeUpdate();
-
-        return true;
-    } catch (SQLException ex) {
-        Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    return false;
-}
-
-    public void disconnect() {
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean edit(Long id, Category category) {
-        try {
-            if (id <= 0 || category == null) {
-                return false;
-            }
-            String sql = "UPDATE categories "
-                    + "SET name=?"
-                    + "WHERE categoryId=? ";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, category.getName());
-            pstmt.setLong(2, id);
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }   
-    return false;
-}
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public boolean delete(Long id) {
-        try {
-             if (id <= 0) {
-                return false;
-            }
-             String sql = "DELETE FROM categories "
-                    + "WHERE categoryId = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, id);
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-              Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return false;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Category findById(Long id) {
-        try {
-            
-            String sql = "SELECT * FROM categories "
-                    + "WHERE categoryId = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, id);
-            ResultSet res = pstmt.executeQuery();
-
-            if (res.next()) {
-                Category cat = new Category();
-                cat.setCategoryId(res.getLong("categoryId"));
-                cat.setName(res.getString("name"));
-                return cat;
-            } else {
-                return null;
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<Category> findAll() {
-        List<Category> categories = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM categories";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                Long id = rs.getLong("categoryId");
-                String name = rs.getString("name");
-                Category category = new Category(id, name);
-                categories.add(category);
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return categories;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-  @Override
+
+    @Override
     public List<Category> findByName(String name) {
-        List<Category> categories = new ArrayList<>();
-        try {
-            String sql = "SELECT * FROM categories WHERE name = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            ResultSet rs = pstmt.executeQuery();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+     /**
+     * Crea la solicitud json de creación del customer para ser enviado por el
+     * socket
+     *
+     * @param customer objeto customer
+     * @return devulve algo como:
+     * {"resource":"customer","action":"post","parameters":[{"name":"id","value":"980000012"},{"name":"fistName","value":"Juan"},...}]}
+     */
+    private String doCreateCustomerRequestJson(Category category) {
 
-            while (rs.next()) {
-                Long id = rs.getLong("categoryId");
-                String categoryName = rs.getString("name");
-                Category category = new Category(id, categoryName);
-                categories.add(category);
-            }
-        } catch (Exception e) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return categories;
+        Protocol protocol = new Protocol();
+        protocol.setResource("category");
+        protocol.setAction("post");
+        /*
+        protocol.addParameter("id", customer.getId());
+        protocol.addParameter("fistName", customer.getFirstName());
+        protocol.addParameter("lastName", customer.getLastName());
+        protocol.addParameter("address", customer.getAddress());
+        protocol.addParameter("email", customer.getEmail());
+        protocol.addParameter("gender", customer.getGender());
+        protocol.addParameter("mobile", customer.getMobile());
+    */
+        Gson gson = new Gson();
+        String requestJson = gson.toJson(protocol);
+        return requestJson;
+    }
+    
+    
+    
+    /**
+    * Convierte jsonCategory, proveniente del server socket, de json a un
+    * objeto Category
+    *
+    * @param jsonCustomer objeto cliente en formato json
+    */
+    private Category jsonToCategory(String jsonCustomer) {
+
+        Gson gson = new Gson();
+        Category customer = gson.fromJson(jsonCustomer, Category.class);
+        return customer;
+
     }
 
+    
 }
