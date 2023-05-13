@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package co.unicauca.openmarket.server.infra.tcpip;
+package co.unicauca.openmarket.domain.services;
+
 
 /**
  *
@@ -11,4 +13,8 @@ package co.unicauca.openmarket.server.infra.tcpip;
  */
 public class OpenMarketHandler {
     
+    
+    public void setService(CustomerService service) {
+        this.service = service;
+    } 
 }
