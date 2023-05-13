@@ -5,10 +5,29 @@
  */
 package co.unicauca.openmarket.commons.infra;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
- * @author brayan
+ * @author brayan majin, julian majin
  */
 public class Parameters {
+    private List<Parameter> parameters;
+    public Parameters() {
+        parameters = new ArrayList<>();
+    }
     
+    public List<Parameter> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<Parameter> parameters) {
+        this.parameters = parameters;
+    }
+
+    public void addParameter(String name, String value) {
+        parameters.add(new Parameter(name, value));
+    }
+
 }
