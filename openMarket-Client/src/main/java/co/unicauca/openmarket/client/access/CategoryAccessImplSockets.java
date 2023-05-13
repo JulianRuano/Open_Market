@@ -51,7 +51,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
         } else {
             if (jsonResponse.contains("error")) {
                 //Devolvió algún error
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse+"aqi estoy");
                 throw new Exception(extractMessages(jsonResponse));
                
             } else {
