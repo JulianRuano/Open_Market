@@ -4,6 +4,7 @@ import co.unicauca.openmarket.client.domain.Category;
 import co.unicauca.openmarket.client.domain.Product;
 import co.unicauca.openmarket.client.domain.service.ProductService;
 import co.unicauca.openmarket.client.infra.Messages;
+import static co.unicauca.openmarket.client.infra.Messages.successMessage;
 import javax.swing.JOptionPane;
 
 /**
@@ -310,7 +311,7 @@ public class GUIProducts extends javax.swing.JFrame {
         btnCerrar.setVisible(false);
         btnSave.setVisible(true);
         btnFind.setVisible(false);
-        txtId.setEnabled(false);
+        txtId.setEnabled(true);
         txtName.setEnabled(true);
         txtDescription.setEnabled(true);
         txtCategory.setEnabled(true);
@@ -326,16 +327,22 @@ public class GUIProducts extends javax.swing.JFrame {
     }
 
     private void addProduct() {
-        String name = txtName.getText().trim();
-        String description = txtDescription.getText().trim();
-        Long categoryId=Long.parseLong(this.txtCategory.getText());
-        if (productService.saveProduct(name, description, categoryId)) {
-            Messages.showMessageDialog("Se grabó con éxito", "Atención");
-            cleanControls();
-            stateInitial();
-        } else {
-            Messages.showMessageDialog("Error al grabar, lo siento mucho", "Atención");
+        try{
+            Long id=Long.parseLong(this.txtId.getText());
+            String name = txtName.getText().trim();
+            String description = txtDescription.getText().trim();
+            Long categoryId=Long.parseLong(this.txtCategory.getText());
+            if (productService.saveProduct(id,name, description, categoryId)) {
+                Messages.showMessageDialog("Se grabó con éxito", "Atención");
+                cleanControls();
+                stateInitial();
+            } else {
+                Messages.showMessageDialog("Error al grabar, lo siento mucho", "Atención");
+            }
+        }catch(Exception ex){
+             successMessage(ex.getMessage(), "Atención");
         }
+           
     }
 
     private void editProduct() {
@@ -345,18 +352,21 @@ public class GUIProducts extends javax.swing.JFrame {
             txtId.requestFocus();
             return;
         }
-        Long productId = Long.valueOf(id);
-        Product prod = new Product();
-        prod.setName(txtName.getText().trim());
-        prod.setDescription(txtDescription.getText().trim());
-        prod.setCategoryId(Long.valueOf(txtCategory.getText()));
-        
-        if (productService.editProduct(productId, prod,prod.getCategoryId())) {
-            Messages.showMessageDialog("Se editó con éxito", "Atención");
-            cleanControls();
-            stateInitial();
-        } else {
-            Messages.showMessageDialog("Error al editar, lo siento mucho", "Atención");
+        Long productId = Long.parseLong(id);
+        String name=txtName.getText();
+        String description=this.txtDescription.getText();
+        Long categoryId=Long.parseLong(this.txtCategory.getText());
+        try{
+             if (productService.editProduct(productId,name,description,categoryId)) {
+                Messages.showMessageDialog("Se editó con éxito", "Atención");
+                cleanControls();
+                stateInitial();
+            } else {
+                Messages.showMessageDialog("Error al editar, lo siento mucho", "Atención");
+            }
+        }catch(Exception ex){
+            successMessage(ex.getMessage(), "Atención");
         }
+            
     }
 }

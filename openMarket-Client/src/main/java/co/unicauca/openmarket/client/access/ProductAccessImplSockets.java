@@ -2,6 +2,11 @@ package co.unicauca.openmarket.client.access;
 
 
 import co.unicauca.openmarket.client.domain.Product;
+import co.unicauca.openmarket.client.infra.OpenMarketSocket;
+import co.unicauca.openmarket.commons.infra.JsonError;
+import co.unicauca.openmarket.commons.infra.Protocol;
+import com.google.gson.Gson;
+import java.io.IOException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,269 +25,229 @@ import java.util.logging.Logger;
  * Es una implementación que tiene libertad de hacer una implementación del
  * contrato. Lo puede hacer con Sqlite, postgres, mysql, u otra tecnología
  *
- * @author Libardo, Julio
+ * @author brayan majin, julian ruano
  */
 public class ProductAccessImplSockets implements IProductAccess {
 
-    private Connection conn;
+    private OpenMarketSocket mySocket;
 
     public ProductAccessImplSockets() {
-        initDatabase();
+       mySocket=new OpenMarketSocket();
     }
 
     @Override
-    public boolean save(Product newProduct, Long categoryId) {
-
+    public boolean save(Product newProduct)throws Exception {
+        boolean bandera=false;
+        String jsonResponse = null;
+        String requestJson = doSaveProductRequestJson(newProduct);
         try {
-            //Validate product
-            if (newProduct == null || newProduct.getName().isBlank()) {
-                return false;
-            }
-            //this.connect();
+            mySocket.connect();
+            jsonResponse = mySocket.sendRequest(requestJson);
+            mySocket.disconnect();
 
-            String sql = "INSERT INTO products ( name, description, categoryId ) "
-                    + "VALUES ( ?, ?, ? )";
-
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newProduct.getName());
-            pstmt.setString(2, newProduct.getDescription());
-            pstmt.setLong(3, categoryId);
-            pstmt.executeUpdate();
-            //this.disconnect();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, "No hubo conexión con el servidor", ex);
         }
-        return false;
+         if (jsonResponse == null) {
+            throw new Exception("No se pudo conectar con el servidor");
+        } else {
+
+            if (jsonResponse.contains("error")) {
+                //Devolvió algún error                
+                Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
+                throw new Exception(extractMessages(jsonResponse));
+            } else {
+                //Agregó correctamente, devuelve la cedula del customer 
+                //return customer.getId();
+                bandera=true;
+            }
+
+        }
+         return bandera;
     }
 
     @Override
-    public List<Product> findAll() {
-        List<Product> products = new ArrayList<>();
+    public boolean edit(Product producto)throws Exception {
+          boolean bandera=false;
+        String jsonResponse = null;
+        String requestJson = doEditproductRequestJson(producto);
         try {
+            mySocket.connect();
+            jsonResponse = mySocket.sendRequest(requestJson);
+            mySocket.disconnect();
 
-            String sql = "SELECT * FROM products";
-            //this.connect();
-
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                Product newProduct = new Product();
-                newProduct.setProductId(rs.getLong("productId"));
-                newProduct.setName(rs.getString("name"));
-                newProduct.setDescription(rs.getString("description"));
-
-                products.add(newProduct);
+        } catch (IOException ex) {
+            Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, "No hubo conexión con el servidor", ex);
+        }
+         if (jsonResponse == null) {
+            throw new Exception("No se pudo conectar con el servidor. Revise la red o que el servidor esté escuchando. ");
+        } else {
+            if (jsonResponse.contains("error")) {
+                //Devolvió algún error
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse+"aqi estoy");
+                throw new Exception(extractMessages(jsonResponse));
+               
+            } else {
+                //Encontró el customer
+                
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+producto.getName());
+                bandera=true;
             }
-            //this.disconnect();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return products;
-    }
-
-    public void initDatabase() {
-        // SQL statement for creating a new table
-        String sql = "CREATE TABLE IF NOT EXISTS products (\n"
-                + "	productId integer PRIMARY KEY AUTOINCREMENT,\n"
-                + "	name text NOT NULL,\n"
-                + "	description text NULL,\n"
-                + "     categoryId integer,\n"
-                + "     FOREIGN KEY (categoryId) REFERENCES categories(categoryId)\n"
-                + ");";
-
-        try {
-            this.connect();
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);
-            //sentencia para crear la tabla categoria
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void connect() {
-        // SQLite connection string
-        //String url = "jdbc:sqlite:./myDatabase.db"; //Para Linux/Mac
-        //String url = "jdbc:sqlite:C:/sqlite/db/myDatabase.db"; //Para Windows
-        String url = "jdbc:sqlite::memory:";
-
-        try {
-            conn = DriverManager.getConnection(url);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void disconnect() {
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-
-    }
-
-    @Override
-    public boolean edit(Long id, Product product, Long categoryId) {
-        try {
-            //Validate product
-            if (id <= 0 || product == null) {
-                return false;
-            }
-            //this.connect();
-
-            String sql = "UPDATE  products "
-                    + "SET name=?, description=?, categoryId=? "
-                    + "WHERE productId = ?";
-
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, product.getName());
-            pstmt.setString(2, product.getDescription());
-            pstmt.setLong(3, categoryId);
-            pstmt.executeUpdate();
-            //this.disconnect();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
+      
+      
+        return bandera;
     }
 
     @Override
     public boolean delete(Long id) {
-        try {
-            //Validate product
-            if (id <= 0) {
-                return false;
-            }
-            //this.connect();
-
-            String sql = "DELETE FROM products "
-                    + "WHERE productId = ?";
-
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, id);
-            pstmt.executeUpdate();
-            //this.disconnect();
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
 
     @Override
-    public Product findById(Long id) {
+    public Product findById(Long id)throws Exception {
+        String jsonResponse = null;
+        String requestJson = doFindProductIdRequestJson(id);
+        System.out.println(requestJson);
         try {
+            mySocket.connect();
+            jsonResponse = mySocket.sendRequest(requestJson);
+            mySocket.disconnect();
 
-            String sql = "SELECT * FROM products  "
-                    + "WHERE productId = ?";
-
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, id);
-
-            ResultSet res = pstmt.executeQuery();
-
-            if (res.next()) {
-                Product prod = new Product();
-                prod.setProductId(res.getLong("productId"));
-                prod.setName(res.getString("name"));
-                prod.setDescription(res.getString("description"));
-                return prod;
-            } else {
-                return null;
-            }
-            //this.disconnect();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, "No hubo conexión con el servidor", ex);
         }
-        return null;
+        if (jsonResponse == null) {
+           
+            throw new Exception("No se pudo conectar con el servidor. Revise la red o que el servidor esté escuchando. ");
+             //return null;
+        } else {
+            if (jsonResponse.contains("error")) {
+                //Devolvió algún error
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
+               throw new Exception(extractMessages(jsonResponse));
+               //return null;
+            } else {
+                //Encontró el category
+                Product product = jsonToProduct(jsonResponse);
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+jsonResponse.toString()+ ")");
+                return product;
+            }
+        } 
+        
+        
     }
 
     @Override
     public List<Product> findByName(String pname) {
-        List<Product> products = new ArrayList<>();
-        try {
-
-            String sql = "SELECT * FROM products"
-                    + " WHERE name = ?";
-            //this.connect();
-
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, pname);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Product newProduct = new Product();
-                newProduct.setProductId(rs.getLong("productId"));
-                newProduct.setName(rs.getString("name"));
-                newProduct.setDescription(rs.getString("description"));
-
-                products.add(newProduct);
-            }
-            //this.disconnect();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return products;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void cleanDatabase() {
-        try {
-            String sql = "DELETE FROM products";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-  
     @Override
     public List<Product> findByCategory(String categoryName) {
-        List<Product> products = new ArrayList<>();
-        try {
-            // Get the categoryId for the given categoryName
-            String categorySql = "SELECT categoryId FROM categories WHERE name = ?";
-            PreparedStatement categoryStmt = conn.prepareStatement(categorySql);
-            categoryStmt.setString(1, categoryName);
-            ResultSet categoryRs = categoryStmt.executeQuery();
-
-            if (categoryRs.next()) {
-                long categoryId = categoryRs.getLong("categoryId");
-
-                // Find products with the given categoryId
-                String productSql = "SELECT * FROM products WHERE categoryId = ?";
-                PreparedStatement productStmt = conn.prepareStatement(productSql);
-                productStmt.setLong(1, categoryId);
-                ResultSet productRs = productStmt.executeQuery();
-
-                while (productRs.next()) {
-                    Product newProduct = new Product();
-                    newProduct.setProductId(productRs.getLong("productId"));
-                    newProduct.setName(productRs.getString("name"));
-                    newProduct.setDescription(productRs.getString("description"));
-                    newProduct.setPrice(productRs.getDouble("price"));
-                    products.add(newProduct);
-                }
-            } else {
-                // No category found with the given categoryName
-                return products;
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return products;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<Product> findAll() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    /**
+     * Crea la solicitud json de creación de la Product para ser enviado por el
+     * socket
+     *
+     * @param Poduct objeto newProduct
+     * @return devulve algo como:
+     * {"resource":"product,"action":"post","parameters":[{"name":"id","value":"1"},{"name":"name","value":"lacteos"},...}]}
+     */
+    private String doSaveProductRequestJson(Product newProduct) {
+        Protocol protocol = new Protocol();
+        protocol.setResource("product");
+        protocol.setAction("post");
+        protocol.addParameter("id",newProduct.getProductId().toString());
+        protocol.addParameter("name",newProduct.getName());
+        protocol.addParameter("description", newProduct.getDescription());
+        protocol.addParameter("description", newProduct.getCategoryId().toString());
+
+        Gson gson = new Gson();
+        String requestJson = gson.toJson(protocol);
+        return requestJson;
+    }
+    
+    /**
+    * Convierte jsonProduct, proveniente del server socket, de json a un
+    * objeto product
+    *
+    * @param jsonProduct objeto cliente en formato json
+    */
+    private Product jsonToProduct(String jsonProduct) {
+
+        Gson gson = new Gson();
+        Product product = gson.fromJson(jsonProduct, Product.class);
+        return product;
+
+    }
+       
+    
+    private String extractMessages(String jsonResponse) {
+        JsonError[] errors = jsonToErrors(jsonResponse);
+        String msjs = "";
+        for (JsonError error : errors) {
+            msjs += error.getMessage();
+        }
+        return msjs;
+    }
+
+    /**
+     * Convierte el jsonError a un array de objetos jsonError
+     *
+     * @param jsonError
+     * @return objeto MyError
+     */
+    private JsonError[] jsonToErrors(String jsonError) {
+        Gson gson = new Gson();
+        JsonError[] error = gson.fromJson(jsonError, JsonError[].class);
+        return error;
+    }
+    /**
+     * Crea una solicitud json para ser enviada por el socket
+     * @param productId identificación del producto
+     * @return solicitud de consulta del producto en formato Json, algo como:
+     * {"resource":"product","action":"get","parameters":[{"name":"id","value":""}]}
+     */
+    private String doFindProductIdRequestJson(Long id) {
+       Protocol protocol = new Protocol();
+        protocol.setResource("product");
+        protocol.setAction("get");
+        protocol.addParameter("productId",id.toString());
+
+        Gson gson = new Gson();
+        String requestJson = gson.toJson(protocol);
+
+        return requestJson;
+    }
+    /**
+     * Crea una solicitud json para ser enviada por el socket
+     *
+     *
+     * @param producto un producto con los siguentes atributos:id, nombre, decripcion, idCategoria
+     * @return solicitud de consulta del producto para editatr en formato Json, algo como:
+     * {"resource":"product","action":"edit","parameters":[{"productId":"id","value":"1"}]}
+     */
+    private String doEditproductRequestJson(Product producto) {
+        Protocol protocol =new Protocol();
+        protocol.setResource("product");
+        protocol.setAction("edit");
+        protocol.addParameter("productId", producto.getProductId().toString());
+        protocol.addParameter("name", producto.getName());
+        protocol.addParameter("description", producto.getDescription());
+        protocol.addParameter("categorId", producto.getCategoryId().toString());
+        
+        Gson gson=new Gson();
+        String requestJson = gson.toJson(protocol);
+        return requestJson; 
+    }
+
+    
 }

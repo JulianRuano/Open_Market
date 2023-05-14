@@ -33,9 +33,10 @@ public class ProductService  {
     }
     
 
-    public boolean saveProduct(String name, String description,Long categoryId) {
+    public boolean saveProduct(Long id,String name, String description,Long categoryId)throws Exception {
         
         Product newProduct = new Product();
+        newProduct.setProductId(id);
         newProduct.setName(name);
         newProduct.setDescription(description);
         newProduct.setCategoryId(categoryId);
@@ -46,7 +47,7 @@ public class ProductService  {
             return false;
         }
 
-        return repository.save(newProduct,categoryId);
+        return repository.save(newProduct);
 
     }
 
@@ -57,7 +58,7 @@ public class ProductService  {
         return products;
     }
     
-    public Product findProductById(Long id){
+    public Product findProductById(Long id)throws Exception{
         return repository.findById(id);
     }
     public List<Product> findProductsByName(String name) {
@@ -78,13 +79,18 @@ public class ProductService  {
        
     }
 
-    public boolean editProduct(Long productId, Product prod,Long categoryId) {
-     
+    public boolean editProduct(Long productId,String name, String description,Long categoryId) throws Exception{
+          
+        Product producto=new Product();
+        producto.setProductId(productId);
+        producto.setName(name);
+        producto.setDescription(description);
+        producto.setCategoryId(categoryId);
         //Validate product
-        if (prod == null || prod.getName().isBlank() ) {
+        if (producto.getProductId() == null ||producto.getName().isBlank()) {
             return false;
         }
-        return repository.edit(productId, prod,categoryId);
+        return repository.edit(producto);
 
     }
 

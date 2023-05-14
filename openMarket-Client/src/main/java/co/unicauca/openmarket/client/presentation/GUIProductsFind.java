@@ -7,6 +7,7 @@ package co.unicauca.openmarket.client.presentation;
 
 import co.unicauca.openmarket.client.domain.Product;
 import co.unicauca.openmarket.client.domain.service.ProductService;
+import static co.unicauca.openmarket.client.infra.Messages.successMessage;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -224,10 +225,12 @@ public class GUIProductsFind extends javax.swing.JDialog {
                 "Error tipo de dato",
                 JOptionPane.ERROR_MESSAGE);
           }catch(Exception e){
+              successMessage(e.getMessage(), "Atención"); 
               JOptionPane.showMessageDialog(null,
                 "Seleccione por el dato que quiere buscar",
                 "Error al introducir el dato",
                 JOptionPane.ERROR_MESSAGE);
+              
           }
             
       
