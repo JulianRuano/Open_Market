@@ -26,9 +26,9 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
     }
    
     public void inicializar() {
-        category.add(new Category(10L, "Andrea"));
-        category.add(new Category(11L, "Libardo"));
-        category.add(new Category(12L, "Carlos"));
+        category.add(new Category(10L, "lacteos"));
+        category.add(new Category(11L, "granos"));
+        category.add(new Category(12L, "mecato"));
         
 
     }

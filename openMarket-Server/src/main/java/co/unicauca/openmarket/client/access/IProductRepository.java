@@ -11,9 +11,9 @@ import java.util.List;
  * @author Libardo, Julio
  */
 public interface IProductRepository {
-    boolean save(Product newProduct,Long categoryId);
+    boolean save(Product newProduct);
     
-    boolean edit(Long id, Product product, Long categoryId);
+    boolean edit(Product newProduct);
     
     boolean delete(Long id);
 

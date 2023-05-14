@@ -5,10 +5,12 @@
  */
 package co.unicauca.openmarket.server.infra.tcpip;
 import co.unicauca.openmarket.client.domain.Category;
+import co.unicauca.openmarket.client.domain.Product;
 import co.unicauca.openmarket.commons.infra.Protocol;
 import co.unicauca.openmarket.domain.services.CategoryService;
 import co.unicauca.strategyserver.infra.ServerHandler;
 import co.unicauca.openmarket.commons.infra.JsonError;
+import co.unicauca.openmarket.domain.services.ProductService;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,10 @@ import java.util.List;
 public class OpenMarketHandler extends ServerHandler {
     /**
      * Servicio de categoria
+     * servicio de producto
      */
     private static CategoryService service;
-    
+     private static ProductService serviceProduc;
     public OpenMarketHandler() {
     }
 
@@ -50,17 +53,32 @@ public class OpenMarketHandler extends ServerHandler {
                 if (protocolRequest.getAction().equals("post")) {
                     // Agregar una categoria    
                     response = processPostCategory(protocolRequest);
-
                 }
                 if (protocolRequest.getAction().equals("edit")){
-                    // Editar
+                    // Editar categoria
                     response = processEditCategory(protocolRequest);
                 } 
                 if(protocolRequest.getAction().equals("delete")){
+                    //Eliminar categoria
                     response = processDeleteCategory(protocolRequest);
                 }
                 break;
             }
+            case"product"->{
+                if (protocolRequest.getAction().equals("get")) {
+                    // Consultar un producto por ide
+                    response = processGetProduct(protocolRequest);
+                }
+                if (protocolRequest.getAction().equals("post")) {
+                    // Agregar un nuevo producto  
+                    response = processPostProduct(protocolRequest);
+                }
+                 if (protocolRequest.getAction().equals("edit")){
+                    // Editar un producto
+                    response = processEditproduct(protocolRequest);
+                }
+                break;
+             }
         }
         return response;
     }
@@ -81,7 +99,7 @@ public class OpenMarketHandler extends ServerHandler {
             return objectToJSON(category);
         }
     }
-    
+  
     /**
      * Procesa la solicitud de agregar una categoria
      *
@@ -116,6 +134,44 @@ public class OpenMarketHandler extends ServerHandler {
     }
     
     
+    
+    
+     private String processGetProduct(Protocol protocolRequest) {
+        // Extraer la cedula del primer parámetro
+        Long id = Long.parseLong(protocolRequest.getParameters().get(0).getValue()) ;
+        Product producto = serviceProduc.findById(id);
+        if (producto == null) {
+            String errorJson = generateNotFoundErrorJson();
+            return errorJson;
+        } else {
+            return objectToJSON(producto);
+        }
+    }
+    private String processPostProduct(Protocol protocolRequest) {
+        Product producto=new Product();
+        // Reconstruir La categoria a partir de lo que viene en los parámetros
+        producto.setProductId(Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
+        producto.setName(protocolRequest.getParameters().get(1).getValue());
+        producto.setDescription(protocolRequest.getParameters().get(2).getValue());
+        producto.setCategoryId(Long.parseLong(protocolRequest.getParameters().get(3).getValue()));
+        
+        boolean response = this.getServiceProduc().save(producto);
+        String respuesta=String.valueOf(response);
+        return respuesta;
+    }
+    private String processEditproduct(Protocol protocolRequest){
+       // Editar la imformacion del producto
+        Product producto=new Product();
+        producto.setProductId( Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
+        producto.setName( protocolRequest.getParameters().get(1).getValue());
+        producto.setDescription(protocolRequest.getParameters().get(2).getValue());
+        producto.setCategoryId(Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
+       
+        boolean response = serviceProduc.edit(producto);
+        String respuesta=String.valueOf(response);
+        return respuesta;
+    }
+    
     /**
      * Genera un ErrorJson de cliente no encontrado
      *
@@ -126,7 +182,7 @@ public class OpenMarketHandler extends ServerHandler {
         JsonError error = new JsonError();
         error.setCode("404");
         error.setError("NOT_FOUND");
-        error.setMessage("Categoria no encontrada. ID no existe");
+        error.setMessage("Clase no encontrada. ID no existe");
         errors.add(error);
 
         Gson gson = new Gson();
@@ -141,6 +197,12 @@ public class OpenMarketHandler extends ServerHandler {
     public CategoryService getService() {
         return service;
     }
+    public ProductService getServiceProduc() {
+        return serviceProduc;
+    }
+    public void setServiceProduct(ProductService serviceProduc) {
+        this.serviceProduc = serviceProduc;
+    } 
     /**
      * @param service the service to set
      */

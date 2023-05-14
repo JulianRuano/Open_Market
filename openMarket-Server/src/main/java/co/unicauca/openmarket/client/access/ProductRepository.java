@@ -30,7 +30,7 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public boolean save(Product newProduct, Long categoryId) {
+    public boolean save(Product newProduct) {
 
         try {
             //Validate product
@@ -39,13 +39,14 @@ public class ProductRepository implements IProductRepository {
             }
             //this.connect();
 
-            String sql = "INSERT INTO products ( name, description, categoryId ) "
-                    + "VALUES ( ?, ?, ? )";
+            String sql = "INSERT INTO products ( productId, name, description, categoryId ) "
+                    + "VALUES ( ?, ?, ?, ? )";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newProduct.getName());
-            pstmt.setString(2, newProduct.getDescription());
-            pstmt.setLong(3, categoryId);
+             pstmt.setLong(1, newProduct.getProductId());
+            pstmt.setString(2, newProduct.getName());
+            pstmt.setString(3, newProduct.getDescription());
+            pstmt.setLong(4, newProduct.getCategoryId());
             pstmt.executeUpdate();
             //this.disconnect();
             return true;
@@ -84,7 +85,7 @@ public class ProductRepository implements IProductRepository {
     public void initDatabase() {
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS products (\n"
-                + "	productId integer PRIMARY KEY AUTOINCREMENT,\n"
+                + "	productId integer PRIMARY KEY,\n"
                 + "	name text NOT NULL,\n"
                 + "	description text NULL,\n"
                 + "     categoryId integer,\n"
@@ -128,10 +129,10 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
-    public boolean edit(Long id, Product product, Long categoryId) {
+    public boolean edit(Product product) {
         try {
             //Validate product
-            if (id <= 0 || product == null) {
+            if (product.getProductId()<= 0 || product == null) {
                 return false;
             }
             //this.connect();
@@ -143,7 +144,8 @@ public class ProductRepository implements IProductRepository {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, product.getName());
             pstmt.setString(2, product.getDescription());
-            pstmt.setLong(3, categoryId);
+            pstmt.setLong(3, product.getCategoryId());
+            pstmt.setLong(4, product.getProductId());
             pstmt.executeUpdate();
             //this.disconnect();
             return true;

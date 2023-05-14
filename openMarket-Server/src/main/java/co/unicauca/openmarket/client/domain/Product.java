@@ -28,6 +28,12 @@ public class Product {
         this.price = price;
         this.categoryId=categoryId;
     }
+      public Product(Long productId, String name, String description,Long categoryId) {
+        this.productId = productId;
+        this.name = name;
+        this.description = description;
+        this.categoryId=categoryId;
+    }
 
     public Product() {
     }

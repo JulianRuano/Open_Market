@@ -50,16 +50,30 @@ public class Factory {
 
     }
     
-        public ICategoryRepository getCatRepository() {
-            String type=Utilities.loadProperty("category.repository");
-             ICategoryRepository result = null;
+    public ICategoryRepository getCatRepository() {
+        String type=Utilities.loadProperty("category.repository");
+         ICategoryRepository result = null;
 
         switch (type) {
             case "default":
                 result = new CategoryRepository();
-                break;
-                
-        }
+            break;
+
+    }
+
+        return result;
+
+    }
+    public IProductRepository getProdRepository() {
+        String type=Utilities.loadProperty("product.repository");
+         IProductRepository result = null;
+
+        switch (type) {
+            case "default":
+                result = new ProductRepository();
+            break;
+
+    }
 
         return result;
 
