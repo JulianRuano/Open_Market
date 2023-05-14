@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author brayan
+ * @author brayan majin, julian ruano
  */
 public class OpeMarketServer {
      /**

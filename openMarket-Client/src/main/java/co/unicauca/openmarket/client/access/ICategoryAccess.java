@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author brayan
+ * @author brayan majin, julian ruano
  */
 public interface ICategoryAccess {
     
@@ -22,7 +22,7 @@ public interface ICategoryAccess {
    boolean delete(Long id);
    Category findById(Long id);
    List<Category> findAll();
-   public List<Category> findByName(String name);
+   List<Category> findByName(String name);
    //boolean clearCategories();
 
 }

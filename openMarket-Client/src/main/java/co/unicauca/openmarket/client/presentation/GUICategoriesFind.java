@@ -191,11 +191,10 @@ public class GUICategoriesFind extends javax.swing.JDialog {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
           try{
-               if(this.rdoId.isSelected()==true){
-                   
-                       fillTableId(categoryService.findCategoryById(Long.valueOf(this.txtSearch.getText())) );
+               if(this.rdoId.isSelected()==true){                 
+                    fillTableId(categoryService.findCategoryById(Long.valueOf(this.txtSearch.getText())) );
                  }else{
-                   fillTableName (categoryService.findCategoriesByName(this.txtSearch.getText())); 
+                    fillTableName (categoryService.findCategoriesByName(this.txtSearch.getText())); 
              }
           }catch(NullPointerException ex){
                 JOptionPane.showMessageDialog(null,
