@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  *
- * @author brayan
+ * @author brayan majin, julian ruano
  */
 public class OpenMarketHandler extends ServerHandler {
     /**
@@ -35,6 +35,7 @@ public class OpenMarketHandler extends ServerHandler {
     /**
      * Procesar la solicitud que proviene de la aplicación cliente
      *
+     * @param requestJson
      */
     @Override
     public String processRequest(String requestJson) {
@@ -63,9 +64,11 @@ public class OpenMarketHandler extends ServerHandler {
                     response = processDeleteCategory(protocolRequest);
                 }
                 if(protocolRequest.getAction().equals("listCategory")){
+                    //Lista de las categoria
                     response = processListCategory();
                 }
                 if(protocolRequest.getAction().equals("getListCategory")){
+                    //Listar categorias por nombre
                     response = processGetListCategory(protocolRequest);
                 }
                 break;
@@ -145,8 +148,11 @@ public class OpenMarketHandler extends ServerHandler {
        return objectToJSON(category);
     }
     private String processGetListCategory(Protocol protocolRequest){
-       // Buscar por nombre       
-       return "";
+       //Listar categorias por nombre 
+       String name = protocolRequest.getParameters().get(0).getValue();
+       List<Category> category;
+       category = service.findByName(name);
+       return objectToJSON(category);
     }
     
     

@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author brayan
+ * @author brayan majin, julian ruano
  */
 public class CategoryService {
     

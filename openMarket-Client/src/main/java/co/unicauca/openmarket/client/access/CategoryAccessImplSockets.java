@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author brayan
+ * @author brayan majin, julian ruano
  */
 public class CategoryAccessImplSockets implements ICategoryAccess {
 
@@ -58,13 +58,13 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
         } else {
             if (jsonResponse.contains("error")) {
                 //Devolvió algún error
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse+"aqi estoy");
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
                 throw new Exception(extractMessages(jsonResponse));
                
             } else {
                 //Encontró el customer
                 
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+newCategory.getName());
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0}", jsonResponse);
                 bandera=true;
             }
         }
@@ -94,7 +94,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
         } else {
             if (jsonResponse.contains("error")) {
                 //Devolvió algún error
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse+"aqi estoy");
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
                 try {
                     throw new Exception(extractMessages(jsonResponse));
                 } catch (Exception ex) {
@@ -104,7 +104,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
             } else {
                 //Encontró la categoria
                 
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+newCategory.getName());
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0}", jsonResponse);
                 bandera=true;
             }
         }
@@ -134,7 +134,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
         } else {
             if (jsonResponse.contains("error")) {
                 //Devolvió algún error
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse+"aqi estoy");
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
                 try {
                     throw new Exception(extractMessages(jsonResponse));
                 } catch (Exception ex) {
@@ -177,7 +177,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
             } else {
                 //Encontró el category
                 Category category = jsonToCategory(jsonResponse);
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+jsonResponse.toString()+ ")");
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0})", jsonResponse);
                 return category;
             }
         }     
@@ -206,7 +206,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
                // throw new Exception(extractMessages(jsonResponse));
                return null;
             } else {
-                //Encontró el category           
+                //Encontró una category           
                 List<Category> listCategory = null;
                 try {
                     listCategory = jsonToListCategory(jsonResponse);
@@ -221,7 +221,38 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
 
     @Override
     public List<Category> findByName(String name){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String jsonResponse = null;
+        String requestJson = doListCategoryNameRequestJson(name);
+        System.out.println(requestJson);
+        try {
+            mySocket.connect();
+            jsonResponse = mySocket.sendRequest(requestJson);
+            mySocket.disconnect();
+
+        } catch (IOException ex) {
+            Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, "No hubo conexión con el servidor", ex);
+        }
+        if (jsonResponse == null) {
+            return null;
+           // throw new Exception("No se pudo conectar con el servidor. Revise la red o que el servidor esté escuchando. ");
+        } else {
+            if (jsonResponse.contains("error")) {
+                //Devolvió algún error
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse);
+               // throw new Exception(extractMessages(jsonResponse));
+               return null;
+            } else {
+                //Encontró la lista de categoria por nombre         
+                List<Category> listCategory = null;
+                try {
+                    listCategory = jsonToListCategory(jsonResponse);
+                } catch (JsonProcessingException ex) {
+                    Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0})", jsonResponse);
+                return listCategory;
+            }
+        }  
     }
     
     
@@ -314,6 +345,17 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
         Protocol protocol = new Protocol();
         protocol.setResource("category");
         protocol.setAction("listCategory");
+       
+        Gson gson = new Gson();
+        String requestJson = gson.toJson(protocol);
+        return requestJson;
+    }
+     
+     private String doListCategoryNameRequestJson(String name){
+        Protocol protocol = new Protocol();
+        protocol.setResource("category");
+        protocol.setAction("getListCategory");
+        protocol.addParameter("name", name);
        
         Gson gson = new Gson();
         String requestJson = gson.toJson(protocol);

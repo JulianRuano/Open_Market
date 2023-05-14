@@ -8,19 +8,20 @@ package co.unicauca.openmarket.client.access;
 import co.unicauca.openmarket.client.domain.Category;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author brayan majin, julian ruano
  */
-public class CategoryRepositoryArrays implements ICategoryRepository{
+public final class CategoryRepositoryArrays implements ICategoryRepository{
         private static List<Category> category;
     public CategoryRepositoryArrays() {
         if (category == null){
             category = new ArrayList();
         }
         
-        if (category.size() == 0){
+        if (category.isEmpty()){
            inicializar();
         }
     }
@@ -82,7 +83,11 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
 
     @Override
     public List<Category> findByName(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    List<Category> filteredCategories = category.stream()
+            .filter(c -> c.getName().contains(name))
+            .collect(Collectors.toList());
+    return filteredCategories.isEmpty() ? null : filteredCategories;
     }
+
     
 }
