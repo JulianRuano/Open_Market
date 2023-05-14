@@ -68,8 +68,43 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
     }
 
     @Override
-    public boolean edit(Long id, Category category) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean edit(Long id, Category newCategory) {
+         boolean bandera=false;
+        String jsonResponse = null;
+        String requestJson = doEditCategoryRequestJson(id,newCategory);
+        try {
+            mySocket.connect();
+            jsonResponse = mySocket.sendRequest(requestJson);
+            mySocket.disconnect();
+
+        } catch (IOException ex) {
+            Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, "No hubo conexión con el servidor", ex);
+        }
+         if (jsonResponse == null) {
+             try {
+                 throw new Exception("No se pudo conectar con el servidor. Revise la red o que el servidor esté escuchando. ");
+             } catch (Exception ex) {
+                 Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
+             }
+        } else {
+            if (jsonResponse.contains("error")) {
+                //Devolvió algún error
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, jsonResponse+"aqi estoy");
+                try {
+                    throw new Exception(extractMessages(jsonResponse));
+                } catch (Exception ex) {
+                    Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.SEVERE, null, ex);
+                }
+               
+            } else {
+                //Encontró el customer
+                
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+newCategory.getName());
+                bandera=true;
+            }
+        }
+      
+       return bandera;
     }
 
     @Override
@@ -180,7 +215,18 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
         return requestJson;
     }
     
-    
+     private String doEditCategoryRequestJson(Long id,Category newCategory) {
+
+        Protocol protocol = new Protocol();
+        protocol.setResource("category");
+        protocol.setAction("edit");
+        protocol.addParameter("id", id.toString());
+        protocol.addParameter("name", newCategory.getName());
+       
+        Gson gson = new Gson();
+        String requestJson = gson.toJson(protocol);
+        return requestJson;
+    }
     
     /**
     * Convierte jsonCategory, proveniente del server socket, de json a un
