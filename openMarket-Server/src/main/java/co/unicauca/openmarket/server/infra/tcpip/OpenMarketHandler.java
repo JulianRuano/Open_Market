@@ -41,7 +41,7 @@ public class OpenMarketHandler extends ServerHandler {
         protocolRequest = gson.fromJson(requestJson, Protocol.class);
         String response="";
         switch (protocolRequest.getResource()) {
-            case "customer":
+            case "category":
                 if (protocolRequest.getAction().equals("get")) {
                     // Consultar un customer
                     response = processGetCategory(protocolRequest);
@@ -49,7 +49,7 @@ public class OpenMarketHandler extends ServerHandler {
 
                 if (protocolRequest.getAction().equals("post")) {
                     // Agregar un customer    
-                    response = processGetCategory(protocolRequest);
+                    response = processPostCategory(protocolRequest);
 
                 }
                 break;
@@ -79,12 +79,14 @@ public class OpenMarketHandler extends ServerHandler {
      *
      * @param protocolRequest Protocolo de la solicitud
      */
-    private boolean processPostCategory(Protocol protocolRequest) {
+    private String processPostCategory(Protocol protocolRequest) {
         Category category = new Category();
         // Reconstruir el customer a partid de lo que viene en los parámetros
-        category.setName(protocolRequest.getParameters().get(0).getValue());
+        category.setCategoryId(Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
+        category.setName(protocolRequest.getParameters().get(1).getValue());
         boolean response = getService().save(category);
-        return response;
+        String respuesta=String.valueOf(response);
+        return respuesta;
     }
     
     /**

@@ -338,7 +338,7 @@ public class GUICategory extends javax.swing.JFrame {
         btnCerrar.setVisible(false);
         btnGrabar.setVisible(true);
         btnBuscar.setVisible(false);
-        txtId.setEnabled(false);
+        txtId.setEnabled(true);
         txtNombre.setEnabled(true);
      
     }
@@ -351,8 +351,9 @@ public class GUICategory extends javax.swing.JFrame {
     //agregar Categorias
     private void addCategory() {
         try{
+            Long id=Long.parseLong(this.txtId.getText());
             String name=this.txtNombre.getText().trim();
-            if(categoryService.saveCategory(name)){
+            if(categoryService.saveCategory(id,name)){
                 Messages.showMessageDialog("Se grabo con exito","Atencion");
                 cleanControls();
                 stateInitial();

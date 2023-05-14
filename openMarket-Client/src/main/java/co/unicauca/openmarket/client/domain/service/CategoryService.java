@@ -22,8 +22,9 @@ public class CategoryService {
     public CategoryService(ICategoryAccess repository){
         this.repository=repository;
     }
-    public boolean saveCategory (String name)throws Exception{
+    public boolean saveCategory (Long id,String name)throws Exception{
         Category newCategory=new Category();
+        newCategory.setCategoryId(id);
         newCategory.setName(name);
         if(newCategory.getName().isBlank()){
             return false;

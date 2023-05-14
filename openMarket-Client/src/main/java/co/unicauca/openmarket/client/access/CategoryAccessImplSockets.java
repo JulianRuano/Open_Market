@@ -59,7 +59,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
             } else {
                 //Encontró el customer
                 
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+newCategory.getCategoryId().toString()+ ")");
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ("+newCategory.getName());
                 bandera=true;
             }
         }
@@ -172,7 +172,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
         Protocol protocol = new Protocol();
         protocol.setResource("category");
         protocol.setAction("post");
-       
+        protocol.addParameter("id", category.getCategoryId().toString());
         protocol.addParameter("name", category.getName());
        
         Gson gson = new Gson();
@@ -191,8 +191,8 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
     private Category jsonToCategory(String jsonCustomer) {
 
         Gson gson = new Gson();
-        Category customer = gson.fromJson(jsonCustomer, Category.class);
-        return customer;
+        Category category = gson.fromJson(jsonCustomer, Category.class);
+        return category;
 
     }
 

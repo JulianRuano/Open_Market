@@ -148,7 +148,7 @@ public abstract class ServerHandler extends Thread{
     }
     
     /**
-     * Convierte el objeto Customer a json para que el servidor lo envie como
+     * Convierte el objeto Category a json para que el servidor lo envie como
      * respuesta por el socket
      *
      * @param object

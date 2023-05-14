@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,13 +33,14 @@ public class CategoryRepository implements ICategoryRepository {
     @Override
     public boolean save(Category newCategory) {
         try {
-            if (newCategory == null || newCategory.getName().isBlank()) {
+            if (newCategory == null || newCategory.getCategoryId()==null) {
                 return false;
             }
             String sql = "INSERT INTO categories ( name) "
                     + "VALUES ( ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newCategory.getName());
+            pstmt.setLong(1, newCategory.getCategoryId());
+            pstmt.setString(2, newCategory.getName());
             pstmt.executeUpdate();
             return true;
         } catch (SQLException ex) {
@@ -51,7 +53,7 @@ public class CategoryRepository implements ICategoryRepository {
         // SQL statement for creating a new table
 
         String sql = "CREATE TABLE IF NOT EXISTS categories (\n"
-                + "      categoryId integer PRIMARY KEY AUTOINCREMENT,\n"
+                + "      categoryId integer PRIMARY KEY,\n"
                 + "      name text NOT NULL\n"
                 + ");";
         try {
@@ -149,7 +151,7 @@ public class CategoryRepository implements ICategoryRepository {
     @Override
     public Category findById(Long id) {
         try {
-            
+             JOptionPane.showMessageDialog(null, "soy el ide: "+id);
             String sql = "SELECT * FROM categories "
                     + "WHERE categoryId = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -160,13 +162,16 @@ public class CategoryRepository implements ICategoryRepository {
                 Category cat = new Category();
                 cat.setCategoryId(res.getLong("categoryId"));
                 cat.setName(res.getString("name"));
+                  JOptionPane.showMessageDialog(null, "soy el ide: "+cat.getCategoryId());
+                  JOptionPane.showMessageDialog(null, "soy el ide: "+cat.getName());
                 return cat;
             } else {
                 return null;
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ProductRepository.class.getName()).log(Level.SEVERE, null, ex);
+             Logger.getLogger(CategoryRepository.class.getName()).log(Level.SEVERE, "Error al consultar Customer de la base de datos", ex);
         }
         return null;
     }

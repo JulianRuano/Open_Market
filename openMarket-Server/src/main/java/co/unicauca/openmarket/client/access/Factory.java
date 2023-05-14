@@ -1,5 +1,7 @@
 package co.unicauca.openmarket.client.access;
 
+import co.unicauca.openmarket.commons.infra.Utilities;
+
 /**
  * Fabrica que se encarga de instanciar ProductRepository o cualquier otro que
  * se cree en el futuro.
@@ -48,9 +50,9 @@ public class Factory {
 
     }
     
-        public ICategoryRepository getCatRepository(String type) {
-
-        ICategoryRepository result = null;
+        public ICategoryRepository getCatRepository() {
+            String type=Utilities.loadProperty("category.repository");
+             ICategoryRepository result = null;
 
         switch (type) {
             case "default":

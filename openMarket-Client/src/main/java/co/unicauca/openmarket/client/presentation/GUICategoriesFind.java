@@ -194,8 +194,6 @@ public class GUICategoriesFind extends javax.swing.JDialog {
                if(this.rdoId.isSelected()==true){
                    
                        fillTableId(categoryService.findCategoryById(Long.valueOf(this.txtSearch.getText())) );
-                  
-                        
                  }else{
                    fillTableName (categoryService.findCategoriesByName(this.txtSearch.getText())); 
              }

@@ -21,10 +21,11 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
         }
         
         if (category.size() == 0){
-           // inicializar();
+           inicializar();
         }
     }
-     public void inicializar() {
+   
+    public void inicializar() {
         category.add(new Category(10L, "Andrea"));
         category.add(new Category(11L, "Libardo"));
         category.add(new Category(12L, "Carlos"));
@@ -50,7 +51,12 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
 
     @Override
     public Category findById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       for (Category category : category) {
+            if (category.getCategoryId().equals(id)) {
+                return category;
+            }
+        }
+        return null;
     }
 
     @Override
