@@ -43,18 +43,21 @@ public class OpenMarketHandler extends ServerHandler {
         switch (protocolRequest.getResource()) {
             case "category" -> {
                 if (protocolRequest.getAction().equals("get")) {
-                    // Consultar un customer
+                    // Consultar una categoria
                     response = processGetCategory(protocolRequest);
                 }
 
                 if (protocolRequest.getAction().equals("post")) {
-                    // Agregar un customer    
+                    // Agregar una categoria    
                     response = processPostCategory(protocolRequest);
 
                 }
                 if (protocolRequest.getAction().equals("edit")){
                     // Editar
                     response = processEditCategory(protocolRequest);
+                } 
+                if(protocolRequest.getAction().equals("delete")){
+                    response = processDeleteCategory(protocolRequest);
                 }
                 break;
             }
@@ -97,13 +100,21 @@ public class OpenMarketHandler extends ServerHandler {
     
     private String processEditCategory(Protocol protocolRequest){
        // Editar el name de la categoria
-        Long id = Long.parseLong(protocolRequest.getParameters().get(0).getValue()) ;
+        Long id = Long.parseLong(protocolRequest.getParameters().get(0).getValue());
         String name = protocolRequest.getParameters().get(1).getValue();
         Category newCategory = new Category(id, name);
         boolean response = service.edit(id, newCategory);
         String respuesta=String.valueOf(response);
         return respuesta;
     }
+    private String processDeleteCategory(Protocol protocolRequest){
+       // Eliminar una categoria 
+       Long id = Long.parseLong(protocolRequest.getParameters().get(0).getValue());
+       boolean response = service.delete(id);
+       String respuesta=String.valueOf(response);
+       return respuesta;
+    }
+    
     
     /**
      * Genera un ErrorJson de cliente no encontrado

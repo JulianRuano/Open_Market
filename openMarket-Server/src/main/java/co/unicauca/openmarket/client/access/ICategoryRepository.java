@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  *
- * @author brayan
+ * @author brayan majin, julian ruano
  */
 public interface ICategoryRepository {
     

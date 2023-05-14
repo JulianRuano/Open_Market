@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author brayan
+ * @author brayan majin, julian ruano
  */
 public class CategoryRepositoryArrays implements ICategoryRepository{
         private static List<Category> category;
@@ -53,8 +53,15 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
 
     @Override
     public boolean delete(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       for (int i = 0; i < category.size(); i++) {
+            if (category.get(i).getCategoryId().equals(id)) {
+                category.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
+
 
     @Override
     public Category findById(Long id) {
