@@ -229,7 +229,8 @@ public class GUIProducts extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String id = txtId.getText().trim();
+        try{
+           String id = txtId.getText().trim();
         if (id.equals("")) {
             Messages.showMessageDialog("Debe buscar el producto a eliminar", "Atención");
             txtId.requestFocus();
@@ -242,7 +243,12 @@ public class GUIProducts extends javax.swing.JFrame {
                 stateInitial();
                 cleanControls();
             }
+        } 
+        }catch(Exception ex){
+            successMessage(ex.getMessage(), "Atención");   
         }
+            
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed

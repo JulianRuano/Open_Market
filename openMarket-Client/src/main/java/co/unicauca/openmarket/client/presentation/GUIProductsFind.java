@@ -205,7 +205,12 @@ public class GUIProductsFind extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSearchAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAllActionPerformed
-        fillTable( productService.findAllProducts());
+        try{
+            fillTable( productService.findAllProducts());
+        }catch(Exception ex){
+            successMessage(ex.getMessage(), "Atención"); 
+        }
+        
     }//GEN-LAST:event_btnSearchAllActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -214,7 +219,7 @@ public class GUIProductsFind extends javax.swing.JDialog {
                
                   fillTableId(productService.findProductById(Long.parseLong(this.txtSearch.getText())) );
                 }else if(this.rdoCategory.isSelected()==true){
-                     fillTableCategory(productService.findProductsByCategory(this.txtSearch.getText()));
+                     fillTableCategory(productService.findProductsByCategory(Long.parseLong(this.txtSearch.getText())));
                  }
                 else{
                    fillTableName (productService.findProductsByName(this.txtSearch.getText())); 

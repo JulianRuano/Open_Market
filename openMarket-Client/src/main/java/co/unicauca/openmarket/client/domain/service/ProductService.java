@@ -51,7 +51,7 @@ public class ProductService  {
 
     }
 
-    public List<Product> findAllProducts() {
+    public List<Product> findAllProducts()throws Exception {
         List<Product> products = new ArrayList<>();
         products = repository.findAll();
 
@@ -61,19 +61,19 @@ public class ProductService  {
     public Product findProductById(Long id)throws Exception{
         return repository.findById(id);
     }
-    public List<Product> findProductsByName(String name) {
+    public List<Product> findProductsByName(String name)throws Exception {
         List<Product> products = new ArrayList<>();
         products = repository.findByName(name);
 
         return products;
     }
-    public List<Product> findProductsByCategory(String categoryName) {
+    public List<Product> findProductsByCategory(Long categoryId) throws Exception{
         List<Product> products = new ArrayList<>();
-        products = repository.findByCategory(categoryName);
+        products = repository.findByCategory(categoryId);
 
         return products;
     }
-    public boolean deleteProduct(Long id){
+    public boolean deleteProduct(Long id)throws Exception {
         
         return repository.delete(id);
        

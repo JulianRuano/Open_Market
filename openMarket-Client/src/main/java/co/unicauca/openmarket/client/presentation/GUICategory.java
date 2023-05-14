@@ -240,21 +240,25 @@ public class GUICategory extends javax.swing.JFrame {
                             
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-           if (txtId.getText().trim().equals("")) {
+       
+        if (txtId.getText().trim().equals("")) {
             Messages.showMessageDialog("Debe ingresar el id del categoria", "Atención");
             txtId.requestFocus();
             return;
-           }
-           if (Messages.showConfirmDialog("Está seguro que desea eliminar esta Categoria?", "Confirmación") == JOptionPane.YES_NO_OPTION) {
-                if(categoryService.deleteCategory(Long.valueOf(txtId.getText().trim()))){
-                      Messages.showMessageDialog("Categoria eliminada con exito", "Atención");
-                       stateInitial();
-                       cleanControls();
-                }else{
-                   Messages.showMessageDialog("Categoria no encontrada", "Error");
-                  
-                }
-           }
+       }
+       if (Messages.showConfirmDialog("Está seguro que desea eliminar esta Categoria?", "Confirmación") == JOptionPane.YES_NO_OPTION) {
+            if(categoryService.deleteCategory(Long.valueOf(txtId.getText().trim()))){
+                  Messages.showMessageDialog("Categoria eliminada con exito", "Atención");
+                   stateInitial();
+                   cleanControls();
+            }else{
+               Messages.showMessageDialog("Categoria no encontrada", "Error");
+
+            }
+       }
+        
+        
+        
            
     }//GEN-LAST:event_btnEliminarActionPerformed
 
