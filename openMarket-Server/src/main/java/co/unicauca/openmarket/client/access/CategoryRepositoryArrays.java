@@ -75,7 +75,9 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
 
     @Override
     public List<Category> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (category.isEmpty())
+            return null;      
+        return category;
     }
 
     @Override

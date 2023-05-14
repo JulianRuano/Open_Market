@@ -62,6 +62,12 @@ public class OpenMarketHandler extends ServerHandler {
                     //Eliminar categoria
                     response = processDeleteCategory(protocolRequest);
                 }
+                if(protocolRequest.getAction().equals("listCategory")){
+                    response = processListCategory();
+                }
+                if(protocolRequest.getAction().equals("getListCategory")){
+                    response = processGetListCategory(protocolRequest);
+                }
                 break;
             }
             case"product"->{
@@ -132,7 +138,16 @@ public class OpenMarketHandler extends ServerHandler {
        String respuesta=String.valueOf(response);
        return respuesta;
     }
-    
+    private String processListCategory(){
+       // Lista de todas las categorias
+       List<Category> category;
+       category = service.findAll();
+       return objectToJSON(category);
+    }
+    private String processGetListCategory(Protocol protocolRequest){
+       // Buscar por nombre       
+       return "";
+    }
     
     
     
