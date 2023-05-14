@@ -40,9 +40,16 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
     }
 
     @Override
-    public boolean edit(Long id, Category category) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean edit(Long id, Category prmCategory) {
+       for (int i = 0; i < category.size(); i++) {
+            if (category.get(i).getCategoryId().equals(id)) {
+                category.set(i, prmCategory);
+                return true;
+            }
+        }
+        return false;
     }
+
 
     @Override
     public boolean delete(Long id) {
@@ -51,9 +58,9 @@ public class CategoryRepositoryArrays implements ICategoryRepository{
 
     @Override
     public Category findById(Long id) {
-       for (Category category : category) {
-            if (category.getCategoryId().equals(id)) {
-                return category;
+       for (Category OCategory : category) {
+            if (OCategory.getCategoryId().equals(id)) {
+                return OCategory;
             }
         }
         return null;

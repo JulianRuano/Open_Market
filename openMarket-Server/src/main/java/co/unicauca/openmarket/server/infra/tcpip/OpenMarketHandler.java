@@ -41,7 +41,7 @@ public class OpenMarketHandler extends ServerHandler {
         protocolRequest = gson.fromJson(requestJson, Protocol.class);
         String response="";
         switch (protocolRequest.getResource()) {
-            case "category":
+            case "category" -> {
                 if (protocolRequest.getAction().equals("get")) {
                     // Consultar un customer
                     response = processGetCategory(protocolRequest);
@@ -52,7 +52,12 @@ public class OpenMarketHandler extends ServerHandler {
                     response = processPostCategory(protocolRequest);
 
                 }
+                if (protocolRequest.getAction().equals("edit")){
+                    // Editar
+                    response = processEditCategory(protocolRequest);
+                }
                 break;
+            }
         }
         return response;
     }
@@ -81,10 +86,21 @@ public class OpenMarketHandler extends ServerHandler {
      */
     private String processPostCategory(Protocol protocolRequest) {
         Category category = new Category();
-        // Reconstruir el customer a partid de lo que viene en los parámetros
+        // Reconstruir La categoria a partir de lo que viene en los parámetros
         category.setCategoryId(Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
         category.setName(protocolRequest.getParameters().get(1).getValue());
         boolean response = getService().save(category);
+        String respuesta=String.valueOf(response);
+        return respuesta;
+    }
+    
+    
+    private String processEditCategory(Protocol protocolRequest){
+       // Editar el name de la categoria
+        Long id = Long.parseLong(protocolRequest.getParameters().get(0).getValue()) ;
+        String name = protocolRequest.getParameters().get(1).getValue();
+        Category newCategory = new Category(id, name);
+        boolean response = service.edit(id, newCategory);
         String respuesta=String.valueOf(response);
         return respuesta;
     }
