@@ -31,7 +31,16 @@ public class OMAddProductCommand extends OMCommand{
 
     @Override
     public void unmake() {
-        // Implemntar
+        try {
+            result = pS.deleteProduct(pP.getProductId());
+        } catch (Exception ex) {
+            Logger.getLogger(OMAddProductCommand.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    public void redo() {
+        
     }
     
     public boolean result(){

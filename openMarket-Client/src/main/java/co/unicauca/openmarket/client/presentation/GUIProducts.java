@@ -45,6 +45,7 @@ public class GUIProducts extends javax.swing.JFrame {
         btnNuevo = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        btnDeshacer = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnFind = new javax.swing.JButton();
@@ -88,6 +89,14 @@ public class GUIProducts extends javax.swing.JFrame {
             }
         });
         pnlSouth.add(btnSave);
+
+        btnDeshacer.setText("Deshacer");
+        btnDeshacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeshacerActionPerformed(evt);
+            }
+        });
+        pnlSouth.add(btnDeshacer);
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +170,7 @@ public class GUIProducts extends javax.swing.JFrame {
                     .addComponent(txtName)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                     .addComponent(txtCategory))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
         pnlCenterLayout.setVerticalGroup(
             pnlCenterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,6 +279,12 @@ public class GUIProducts extends javax.swing.JFrame {
     private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCategoryActionPerformed
+
+    private void btnDeshacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeshacerActionPerformed
+        ominvoker.unexecute();
+        if(!ominvoker.hasMoreCommands())
+            this.btnDeshacer.setVisible(false);
+    }//GEN-LAST:event_btnDeshacerActionPerformed
     private void stateEdit() {
         btnNuevo.setVisible(false);
         btnEditar.setVisible(false);
@@ -282,6 +297,7 @@ public class GUIProducts extends javax.swing.JFrame {
         txtName.setEnabled(true);
         txtDescription.setEnabled(true);
         txtCategory.setEnabled(true);
+        
     }
 
     private void stateInitial() {
@@ -296,12 +312,14 @@ public class GUIProducts extends javax.swing.JFrame {
         txtName.setEnabled(false);
         txtDescription.setEnabled(false);
         txtCategory.setEnabled(false);
+        btnDeshacer.setVisible(ominvoker.hasMoreCommands());
 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnDeshacer;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnFind;
@@ -332,7 +350,7 @@ public class GUIProducts extends javax.swing.JFrame {
         txtName.setEnabled(true);
         txtDescription.setEnabled(true);
         txtCategory.setEnabled(true);
-
+        btnDeshacer.setVisible(ominvoker.hasMoreCommands());
     }
 
     private void cleanControls() {

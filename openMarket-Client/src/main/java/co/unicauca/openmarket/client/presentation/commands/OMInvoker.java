@@ -14,6 +14,7 @@ import java.util.List;
 public class OMInvoker {
     
     private List<OMCommand> myCommands;
+    private List<OMCommand> deleteCommands;
     private OMCommand currentCommand;
     
     public OMInvoker(){
@@ -37,14 +38,28 @@ public class OMInvoker {
             int index = myCommands.size()-1;
             OMCommand command= myCommands.get(index);
             command.unmake();
+            deleteCommands.add(command);
             myCommands.remove(index);
         }
         
     }
     
+    public void yesExecuted(){
+        if (!deleteCommands.isEmpty()){
+            int index = deleteCommands.size()-1;
+            OMCommand command= deleteCommands.get(index);
+            command.redo();
+            myCommands.add(command);
+            deleteCommands.remove(index);
+        }
+    }
+    
+    
     public boolean hasMoreCommands(){
         return !myCommands.isEmpty();
     }
-    
+    public boolean hasMoreCommandsRedo(){
+        return !deleteCommands.isEmpty();
+    }
     
 }

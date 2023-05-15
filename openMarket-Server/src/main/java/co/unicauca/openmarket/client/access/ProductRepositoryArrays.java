@@ -28,10 +28,7 @@ public class ProductRepositoryArrays implements IProductRepository{
     }
         
     public void inicializar(){
-        productos.add(new Product(1L,"yogurt","Yogurt con trozos de fruta",10L));
-        productos.add(new Product(2L,"Leche","leche deslactosada",10L));
-        productos.add(new Product(3L,"Frijol","frijol calima",11L));
-        productos.add(new Product(4L,"Picadas","Papas fritas",12L));
+
     }  
     @Override
     public boolean save(Product newProduct) {

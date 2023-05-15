@@ -11,4 +11,5 @@ package co.unicauca.openmarket.client.presentation.commands;
 public abstract class OMCommand {
     public abstract void make();
     public abstract void unmake();
+    public abstract  void redo();
 }

@@ -40,6 +40,12 @@ public class OMDeleteCategoryCommand extends OMCommand {
         }
     }
     
+    @Override
+    public void redo() {
+        
+    }
+    
+    
     public boolean result(){
         return result;
     } 

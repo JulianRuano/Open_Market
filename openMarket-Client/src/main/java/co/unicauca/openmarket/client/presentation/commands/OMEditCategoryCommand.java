@@ -42,6 +42,11 @@ public class OMEditCategoryCommand extends OMCommand{
         }
     }
     
+    @Override
+    public void redo() {
+        
+    }
+    
     public boolean result(){
         return result;
     }

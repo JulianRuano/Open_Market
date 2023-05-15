@@ -62,6 +62,8 @@ public class GUICategory extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnCerrar = new javax.swing.JButton();
+        btnDeshacer = new javax.swing.JButton();
+        btnRehacer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Categoria");
@@ -157,17 +159,35 @@ public class GUICategory extends javax.swing.JFrame {
             }
         });
 
+        btnDeshacer.setText("Deshacer");
+        btnDeshacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeshacerActionPerformed(evt);
+            }
+        });
+
+        btnRehacer.setText("Rehacer");
+        btnRehacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRehacerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSouthLayout = new javax.swing.GroupLayout(pnlSouth);
         pnlSouth.setLayout(pnlSouthLayout);
         pnlSouthLayout.setHorizontalGroup(
             pnlSouthLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSouthLayout.createSequentialGroup()
-                .addGap(73, 73, 73)
+                .addGap(81, 81, 81)
                 .addComponent(btnNuevo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEditar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGrabar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRehacer)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDeshacer)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCancelar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -189,7 +209,9 @@ public class GUICategory extends javax.swing.JFrame {
                     .addComponent(btnCancelar)
                     .addComponent(btnEliminar)
                     .addComponent(btnBuscar)
-                    .addComponent(btnCerrar))
+                    .addComponent(btnCerrar)
+                    .addComponent(btnDeshacer)
+                    .addComponent(btnRehacer))
                 .addGap(22, 22, 22))
         );
 
@@ -293,6 +315,18 @@ public class GUICategory extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
+    private void btnDeshacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeshacerActionPerformed
+        ominvoker.unexecute();
+        if(!ominvoker.hasMoreCommands())
+            this.btnDeshacer.setVisible(false);
+    }//GEN-LAST:event_btnDeshacerActionPerformed
+
+    private void btnRehacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRehacerActionPerformed
+        ominvoker.yesExecuted();
+        if(!ominvoker.hasMoreCommandsRedo())
+            this.btnRehacer.setVisible(false);
+    }//GEN-LAST:event_btnRehacerActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -323,16 +357,20 @@ public class GUICategory extends javax.swing.JFrame {
         btnBuscar.setVisible(true);
         txtId.setEnabled(false);
         txtNombre.setEnabled(false);
+        btnDeshacer.setVisible(ominvoker.hasMoreCommands());
+        btnRehacer.setVisible(ominvoker.hasMoreCommandsRedo());
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnDeshacer;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGrabar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnRehacer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel pnlCenter;
@@ -352,7 +390,8 @@ public class GUICategory extends javax.swing.JFrame {
         btnBuscar.setVisible(false);
         txtId.setEnabled(true);
         txtNombre.setEnabled(true);
-     
+        btnDeshacer.setVisible(ominvoker.hasMoreCommands());
+        btnRehacer.setVisible(ominvoker.hasMoreCommandsRedo());
     }
     //limpiar las cajas de texto
     private void cleanControls() {
