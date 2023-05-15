@@ -43,10 +43,6 @@ public class OMDeleteProductCommand extends OMCommand{
         
     }
     
-    @Override
-    public void redo() {
-        
-    }
     
     public boolean result(){
         return result;

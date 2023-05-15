@@ -41,10 +41,6 @@ public class OMEditProductCommand extends OMCommand {
             Logger.getLogger(OMEditProductCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    @Override
-    public void redo() {
-        
-    }
     
     public boolean result(){
         return result;

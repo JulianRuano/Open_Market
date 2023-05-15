@@ -37,10 +37,7 @@ public class OMAddCategoryCommand extends OMCommand {
         result = cS.deleteCategory(cC.getCategoryId());
     }
     
-    @Override
-    public void redo() {
-        make();
-    }
+
     
     public boolean result(){
         return result;

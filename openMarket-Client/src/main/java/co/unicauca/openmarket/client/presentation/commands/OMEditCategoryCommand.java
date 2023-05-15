@@ -41,11 +41,7 @@ public class OMEditCategoryCommand extends OMCommand{
             Logger.getLogger(OMDeleteCategoryCommand.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    @Override
-    public void redo() {
-        
-    }
+
     
     public boolean result(){
         return result;

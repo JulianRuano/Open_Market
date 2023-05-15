@@ -46,6 +46,7 @@ public class GUIProducts extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnDeshacer = new javax.swing.JButton();
+        btnRehacer = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnFind = new javax.swing.JButton();
@@ -97,6 +98,14 @@ public class GUIProducts extends javax.swing.JFrame {
             }
         });
         pnlSouth.add(btnDeshacer);
+
+        btnRehacer.setText("Rehacer");
+        btnRehacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRehacerActionPerformed(evt);
+            }
+        });
+        pnlSouth.add(btnRehacer);
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -284,7 +293,15 @@ public class GUIProducts extends javax.swing.JFrame {
         ominvoker.unexecute();
         if(!ominvoker.hasMoreCommands())
             this.btnDeshacer.setVisible(false);
+        this.btnRehacer.setVisible(true);
     }//GEN-LAST:event_btnDeshacerActionPerformed
+
+    private void btnRehacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRehacerActionPerformed
+        ominvoker.reExecuted();
+        if(!ominvoker.hasMoreCommandsRedo())
+            this.btnRehacer.setVisible(false);
+        this.btnDeshacer.setVisible(true);
+    }//GEN-LAST:event_btnRehacerActionPerformed
     private void stateEdit() {
         btnNuevo.setVisible(false);
         btnEditar.setVisible(false);
@@ -313,7 +330,7 @@ public class GUIProducts extends javax.swing.JFrame {
         txtDescription.setEnabled(false);
         txtCategory.setEnabled(false);
         btnDeshacer.setVisible(ominvoker.hasMoreCommands());
-
+        btnRehacer.setVisible(ominvoker.hasMoreCommandsRedo());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -324,6 +341,7 @@ public class GUIProducts extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnFind;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnRehacer;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -351,6 +369,7 @@ public class GUIProducts extends javax.swing.JFrame {
         txtDescription.setEnabled(true);
         txtCategory.setEnabled(true);
         btnDeshacer.setVisible(ominvoker.hasMoreCommands());
+        btnRehacer.setVisible(ominvoker.hasMoreCommandsRedo());
     }
 
     private void cleanControls() {

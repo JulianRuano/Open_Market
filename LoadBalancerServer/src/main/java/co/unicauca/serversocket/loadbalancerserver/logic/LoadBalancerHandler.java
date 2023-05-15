@@ -51,7 +51,7 @@ public class LoadBalancerHandler extends ServerHandler {
             conn.setServer(serverScheduler.selectServer(this.getSocket()));
             conn.connect();
             response = conn.sendRequest(requestJson);
-            // this.respond(conn.sendRequest(requestJson));
+            //this.respond(conn.sendRequest(requestJson));
             System.out.println("Pasando por el balanceador ...");
             conn.closeStream();
             conn.disconnect();

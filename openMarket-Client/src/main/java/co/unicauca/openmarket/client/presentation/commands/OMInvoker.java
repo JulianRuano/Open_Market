@@ -19,6 +19,7 @@ public class OMInvoker {
     
     public OMInvoker(){
         myCommands = new ArrayList<>();
+        deleteCommands = new ArrayList<>();
         currentCommand=null;
     }
     
@@ -44,11 +45,11 @@ public class OMInvoker {
         
     }
     
-    public void yesExecuted(){
+    public void reExecuted(){
         if (!deleteCommands.isEmpty()){
             int index = deleteCommands.size()-1;
             OMCommand command= deleteCommands.get(index);
-            command.redo();
+            command.make();
             myCommands.add(command);
             deleteCommands.remove(index);
         }

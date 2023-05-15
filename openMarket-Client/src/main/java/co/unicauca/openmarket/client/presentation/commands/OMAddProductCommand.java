@@ -38,10 +38,6 @@ public class OMAddProductCommand extends OMCommand{
         }
     }
     
-    @Override
-    public void redo() {
-        
-    }
     
     public boolean result(){
         return result;

@@ -317,14 +317,18 @@ public class GUICategory extends javax.swing.JFrame {
 
     private void btnDeshacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeshacerActionPerformed
         ominvoker.unexecute();
-        if(!ominvoker.hasMoreCommands())
-            this.btnDeshacer.setVisible(false);
+        if(!ominvoker.hasMoreCommands()){
+            this.btnDeshacer.setVisible(false);           
+        }    
+        this.btnRehacer.setVisible(true);
     }//GEN-LAST:event_btnDeshacerActionPerformed
 
     private void btnRehacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRehacerActionPerformed
-        ominvoker.yesExecuted();
-        if(!ominvoker.hasMoreCommandsRedo())
-            this.btnRehacer.setVisible(false);
+        ominvoker.reExecuted();
+        if(!ominvoker.hasMoreCommandsRedo()){
+            this.btnRehacer.setVisible(false);            
+        }  
+        this.btnDeshacer.setVisible(true);
     }//GEN-LAST:event_btnRehacerActionPerformed
 
     
