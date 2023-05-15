@@ -248,17 +248,17 @@ public class ProductRepository implements IProductRepository {
 
   
     @Override
-    public List<Product> findByCategory(String categoryName) {
+    public List<Product> findByCategory(Long categoryId) {
         List<Product> products = new ArrayList<>();
         try {
             // Get the categoryId for the given categoryName
-            String categorySql = "SELECT categoryId FROM categories WHERE name = ?";
+            String categorySql = "SELECT categoryId FROM categories WHERE categoryId = ?";
             PreparedStatement categoryStmt = conn.prepareStatement(categorySql);
-            categoryStmt.setString(1, categoryName);
+            categoryStmt.setLong(1, categoryId);
             ResultSet categoryRs = categoryStmt.executeQuery();
 
             if (categoryRs.next()) {
-                long categoryId = categoryRs.getLong("categoryId");
+                long id = categoryRs.getLong("categoryId");
 
                 // Find products with the given categoryId
                 String productSql = "SELECT * FROM products WHERE categoryId = ?";

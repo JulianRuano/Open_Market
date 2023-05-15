@@ -6,8 +6,9 @@
 package co.unicauca.openmarket.client.access;
 
 
-import co.unicauca.openmarket.client.domain.Category;
+//import co.unicauca.openmarket.client.domain.Category;
 import co.unicauca.openmarket.client.infra.OpenMarketSocket;
+import co.unicauca.openmarket.commons.domain.Category;
 import co.unicauca.openmarket.commons.infra.JsonError;
 import co.unicauca.openmarket.commons.infra.Protocol;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,13 +19,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import reloj.frameworkobsobs.Observado;
+
 
 
 /**
  *
  * @author brayan majin, julian ruano
  */
-public class CategoryAccessImplSockets implements ICategoryAccess {
+public class CategoryAccessImplSockets  implements ICategoryAccess {
 
      private final OpenMarketSocket mySocket;
      public CategoryAccessImplSockets() {
@@ -55,10 +58,12 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
                
             } else {
                 //Encontró el customer
-                
+
                 Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0})", jsonResponse);
                 bandera=true;
+                
             }
+            
         }
       
        return bandera;
@@ -134,9 +139,9 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
                 }
                
             } else {
-                //Encontró la categoria
-                
+                //Encontró la categoria               
                 Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: {0})", requestJson);
+
                 bandera=true;
             }
         }

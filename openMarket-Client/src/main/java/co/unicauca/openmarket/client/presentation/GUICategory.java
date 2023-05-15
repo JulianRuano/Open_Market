@@ -5,7 +5,7 @@
  */
 package co.unicauca.openmarket.client.presentation;
 
-import co.unicauca.openmarket.client.domain.Category;
+
 import co.unicauca.openmarket.client.domain.service.CategoryService;
 import co.unicauca.openmarket.client.infra.Messages;
 import static co.unicauca.openmarket.client.infra.Messages.successMessage;
@@ -13,6 +13,8 @@ import co.unicauca.openmarket.client.presentation.commands.OMAddCategoryCommand;
 import co.unicauca.openmarket.client.presentation.commands.OMDeleteCategoryCommand;
 import co.unicauca.openmarket.client.presentation.commands.OMEditCategoryCommand;
 import co.unicauca.openmarket.client.presentation.commands.OMInvoker;
+import co.unicauca.openmarket.commons.domain.Category;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -245,7 +247,8 @@ public class GUICategory extends javax.swing.JFrame {
                             
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-           if (txtId.getText().trim().equals("")) {
+       
+        if (txtId.getText().trim().equals("")) {
             Messages.showMessageDialog("Debe ingresar el id del categoria", "Atención");
             txtId.requestFocus();
             return;
@@ -263,8 +266,7 @@ public class GUICategory extends javax.swing.JFrame {
                    Messages.showMessageDialog("Categoria no encontrada", "Error");
                   
                 }
-           }
-           
+           }     
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -284,6 +286,7 @@ public class GUICategory extends javax.swing.JFrame {
 
         GUICategoriesFind instance = new GUICategoriesFind(this, true, categoryService);
         instance.setVisible(true);
+        // categoryService.addObservador(instance);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed

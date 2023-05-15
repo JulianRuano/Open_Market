@@ -15,13 +15,13 @@ public interface IProductAccess {
     
     boolean edit(Product producto)throws Exception;
     
-    boolean delete(Long id);
+    boolean delete(Long id)throws Exception ;
 
     Product findById(Long id)throws Exception;
     
-   List<Product> findByName(String pname);
-    List<Product> findByCategory(String categoryName);
-    List<Product> findAll();
+   List<Product> findByName(String pname)throws Exception;
+    List<Product> findByCategory(Long categoryName)throws Exception;
+    List<Product> findAll()throws Exception;
     
 
 }

@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import co.unicauca.openmarket.client.access.IProductAccess;
 import co.unicauca.openmarket.client.domain.Product;
+import reloj.frameworkobsobs.Observado;
 
 /**
  *
  * @author Libardo, Julio
  */
-public class ProductService  {
+public class ProductService extends Observado {
       
     // Ahora hay una dependencia de una abstracción, no es algo concreto,
     // no sabe cómo está implementado.
@@ -46,12 +47,13 @@ public class ProductService  {
         if (newProduct.getName().isBlank() ) {
             return false;
         }
-
+        
+        this.notificar();
         return repository.save(newProduct);
 
     }
 
-    public List<Product> findAllProducts() {
+    public List<Product> findAllProducts()throws Exception {
         List<Product> products = new ArrayList<>();
         products = repository.findAll();
 
@@ -61,20 +63,20 @@ public class ProductService  {
     public Product findProductById(Long id)throws Exception{
         return repository.findById(id);
     }
-    public List<Product> findProductsByName(String name) {
+    public List<Product> findProductsByName(String name)throws Exception {
         List<Product> products = new ArrayList<>();
         products = repository.findByName(name);
 
         return products;
     }
-    public List<Product> findProductsByCategory(String categoryName) {
+    public List<Product> findProductsByCategory(Long categoryId) throws Exception{
         List<Product> products = new ArrayList<>();
-        products = repository.findByCategory(categoryName);
+        products = repository.findByCategory(categoryId);
 
         return products;
     }
-    public boolean deleteProduct(Long id){
-        
+    public boolean deleteProduct(Long id)throws Exception {
+        this.notificar();
         return repository.delete(id);
        
     }

@@ -8,6 +8,7 @@ package co.unicauca.openmarket.client.access;
 import co.unicauca.openmarket.client.domain.Product;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -51,7 +52,13 @@ public class ProductRepositoryArrays implements IProductRepository{
 
     @Override
     public boolean delete(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       for (int i = 0; i < productos.size(); i++) {
+            if (productos.get(i).getProductId().equals(id)) {
+                productos.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -66,17 +73,29 @@ public class ProductRepositoryArrays implements IProductRepository{
 
     @Override
     public List<Product> findByName(String pname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         List<Product> filteredProducts = productos.stream()
+            .filter(c -> c.getName().contains(pname))
+            .collect(Collectors.toList());
+    return filteredProducts.isEmpty() ? null : filteredProducts;
     }
-
+    
     @Override
-    public List<Product> findByCategory(String categoryName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Product> findByCategory(Long categoryId) {
+        List<Product>listaProductos=new ArrayList<>();
+       for(Product OProducto:productos){
+          if (OProducto.getCategoryId().equals(categoryId)){
+              listaProductos.add(OProducto);
+          }
+       }
+      
+       return listaProductos;
     }
 
     @Override
     public List<Product> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (productos.isEmpty())
+            return null;      
+        return productos;
     }
     
 }

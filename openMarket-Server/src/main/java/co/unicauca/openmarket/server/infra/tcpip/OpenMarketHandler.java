@@ -82,9 +82,25 @@ public class OpenMarketHandler extends ServerHandler {
                     // Agregar un nuevo producto  
                     response = processPostProduct(protocolRequest);
                 }
-                 if (protocolRequest.getAction().equals("edit")){
+                if (protocolRequest.getAction().equals("edit")){
                     // Editar un producto
-                    response = processEditproduct(protocolRequest);
+                    response = processEditProduct(protocolRequest);
+                }
+                if (protocolRequest.getAction().equals("delete")){
+                    // eliminar un producto
+                    response = processDeleteProduct(protocolRequest);
+                }
+                  if (protocolRequest.getAction().equals("listProductName")){
+                    // Editar un producto
+                    response = processListNameProduct(protocolRequest);
+                }
+                if (protocolRequest.getAction().equals("listProductCategory")){
+                    //listar los productos por categoria
+                    response = processListCategoryProduct(protocolRequest);
+                }
+                if (protocolRequest.getAction().equals("listAllProduct")){
+                    // Editar un producto
+                    response = processListAllProduct(protocolRequest);
                 }
                 break;
              }
@@ -180,7 +196,7 @@ public class OpenMarketHandler extends ServerHandler {
         String respuesta=String.valueOf(response);
         return respuesta;
     }
-    private String processEditproduct(Protocol protocolRequest){
+    private String processEditProduct(Protocol protocolRequest){
        // Editar la imformacion del producto
         Product producto=new Product();
         producto.setProductId( Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
@@ -230,6 +246,36 @@ public class OpenMarketHandler extends ServerHandler {
     public void setService(CategoryService service) {
         this.service = service;
     } 
+
+    private String processDeleteProduct(Protocol protocolRequest) {
+       // Eliminar una categoria 
+       Long id = Long.parseLong(protocolRequest.getParameters().get(0).getValue());
+       boolean response = serviceProduc.delete(id);
+       String respuesta=String.valueOf(response);
+       return respuesta;
+    }
+
+    private String processListNameProduct(Protocol protocolRequest) {
+      List<Product>productos;
+      String name=protocolRequest.getParameters().get(0).getValue();
+      productos=serviceProduc.findByName(name);
+      return objectToJSON(productos);
+      
+      
+    }
+
+    private String processListCategoryProduct(Protocol protocolRequest) {
+      List<Product>productos;
+      Long categoryId=Long.parseLong(protocolRequest.getParameters().get(0).getValue());
+      productos=serviceProduc.findByCategory(categoryId);
+      return objectToJSON(productos);
+    }
+
+    private String processListAllProduct(Protocol protocolRequest) {
+       List<Product>productos;
+      productos=serviceProduc.findAll();
+      return objectToJSON(productos);
+    }
     
    
 }

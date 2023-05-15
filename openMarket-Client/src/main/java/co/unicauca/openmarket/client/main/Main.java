@@ -5,13 +5,17 @@
  */
 package co.unicauca.openmarket.client.main;
 
+import co.unicauca.openmarket.client.access.CategoryAccessImplSockets;
 import co.unicauca.openmarket.client.access.Factory;
 import co.unicauca.openmarket.client.access.ICategoryAccess;
 import co.unicauca.openmarket.client.access.IProductAccess;
 import co.unicauca.openmarket.client.domain.service.CategoryService;
 import co.unicauca.openmarket.client.domain.service.ProductService;
+import co.unicauca.openmarket.client.presentation.GUICategoriesFind;
 import co.unicauca.openmarket.client.presentation.GUICategory;
 import co.unicauca.openmarket.client.presentation.GUIProducts;
+import co.unicauca.openmarket.client.presentation.GUIProductsFind;
+import reloj.frameworkobsobs.Observador;
 
 /**
  *
@@ -36,8 +40,21 @@ public class Main {
         instance1.setSize(595, 380);
         instance1.setLocation(0,0);
         GUIProducts instance2 = new GUIProducts(productService);
+        
         instance2.setVisible(true);
-         instance2.setLocation(590, 0);
+        instance2.setLocation(590, 0);
+         
+        GUIProductsFind instance3 = new GUIProductsFind(null,false,productService);
+        instance3.setVisible(true);
+        productService.addObservador(instance3);
+        
+        
+        //instance4.setVisible(true);
+        //categoryService.addObservador(instance4);
+         //ategoryAccessImplSockets cate=new CategoryAccessImplSockets() ;
+         //GUICategoriesFind instance4 = new GUICategoriesFind (null,false,cate);
+         //cate.addObservador(instance4);
+        
     }
     
 }

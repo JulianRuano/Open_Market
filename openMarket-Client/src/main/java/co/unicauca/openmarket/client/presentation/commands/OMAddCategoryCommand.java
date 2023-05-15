@@ -4,7 +4,7 @@
  */
 package co.unicauca.openmarket.client.presentation.commands;
 
-import co.unicauca.openmarket.client.domain.Category;
+import co.unicauca.openmarket.commons.domain.Category;
 import co.unicauca.openmarket.client.domain.service.CategoryService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
