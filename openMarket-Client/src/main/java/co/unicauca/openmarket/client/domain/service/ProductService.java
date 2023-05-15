@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import co.unicauca.openmarket.client.access.IProductAccess;
 import co.unicauca.openmarket.client.domain.Product;
+import reloj.frameworkobsobs.Observado;
 
 /**
  *
  * @author Libardo, Julio
  */
-public class ProductService  {
+public class ProductService extends Observado {
       
     // Ahora hay una dependencia de una abstracción, no es algo concreto,
     // no sabe cómo está implementado.
@@ -46,7 +47,8 @@ public class ProductService  {
         if (newProduct.getName().isBlank() ) {
             return false;
         }
-
+        
+        this.notificar();
         return repository.save(newProduct);
 
     }
@@ -74,7 +76,7 @@ public class ProductService  {
         return products;
     }
     public boolean deleteProduct(Long id)throws Exception {
-        
+        this.notificar();
         return repository.delete(id);
        
     }

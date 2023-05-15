@@ -254,6 +254,7 @@ public class GUIProducts extends javax.swing.JFrame {
     private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
         GUIProductsFind instance = new GUIProductsFind(this, true, productService);
         instance.setVisible(true);
+        productService.addObservador(instance);
     }//GEN-LAST:event_btnFindActionPerformed
 
     private void txtCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoryActionPerformed

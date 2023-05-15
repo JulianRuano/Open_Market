@@ -2,10 +2,12 @@
 package co.unicauca.openmarket.client.domain.service;
 
 import co.unicauca.openmarket.client.access.ICategoryAccess;
-import co.unicauca.openmarket.client.domain.Category;
+import co.unicauca.openmarket.commons.domain.Category;
+
 
 import java.util.List;
 import javax.swing.JOptionPane;
+import reloj.frameworkobsobs.Observado;
 
 /**
  *
@@ -29,6 +31,7 @@ public class CategoryService {
         if(newCategory.getName().isBlank()){
             return false;
         }
+        
         return repository.save(newCategory);
     }
     public boolean editCategory(Long categoryId,Category cat) {
@@ -43,6 +46,7 @@ public class CategoryService {
     }
     
    public boolean deleteCategory(Long id){
+      
         return repository.delete(id);
     }  
     public Category findCategoryById(Long id)throws Exception{

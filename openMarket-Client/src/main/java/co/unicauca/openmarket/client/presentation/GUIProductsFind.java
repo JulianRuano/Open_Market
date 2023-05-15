@@ -9,14 +9,17 @@ import co.unicauca.openmarket.client.domain.Product;
 import co.unicauca.openmarket.client.domain.service.ProductService;
 import static co.unicauca.openmarket.client.infra.Messages.successMessage;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import reloj.frameworkobsobs.Observador;
 
 /**
  *
  * @author Libardo Pantoja
  */
-public class GUIProductsFind extends javax.swing.JDialog {
+public class GUIProductsFind extends javax.swing.JDialog implements Observador {
     private ProductService productService;
     /**
      * Creates new form GUIProductsFind
@@ -268,4 +271,14 @@ public class GUIProductsFind extends javax.swing.JDialog {
     private javax.swing.JTable tblProducts;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actualizar() {
+        try {
+            fillTable(productService.findAllProducts());
+        } catch (Exception ex) {
+           successMessage(ex.getMessage(), "Atención");
+        }
+       
+    }
 }

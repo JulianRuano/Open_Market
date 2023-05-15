@@ -6,18 +6,20 @@
 package co.unicauca.openmarket.client.presentation;
 
 
-import co.unicauca.openmarket.client.domain.Category;
+//import co.unicauca.openmarket.client.domain.Category;
 import co.unicauca.openmarket.client.domain.service.CategoryService;
 import static co.unicauca.openmarket.client.infra.Messages.successMessage;
+import co.unicauca.openmarket.commons.domain.Category;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import reloj.frameworkobsobs.Observador;
 
 /**
  *
  * @author Libardo Pantoja
  */
-public class GUICategoriesFind extends javax.swing.JDialog {
+public class GUICategoriesFind extends javax.swing.JDialog implements Observador {
     private CategoryService categoryService;
     /**
      * Creates new form GUIProductsFind
@@ -238,4 +240,13 @@ public class GUICategoriesFind extends javax.swing.JDialog {
     private javax.swing.JTable tblProducts;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actualizar() {
+       try {
+            fillTable(categoryService.findAllCategories());
+        } catch (Exception ex) {
+           successMessage(ex.getMessage(), "Atención");
+        }
+    }
 }
