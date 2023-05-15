@@ -43,8 +43,9 @@ public class CategoryService extends Observado{
             return false;
         }
       
-       
-        return repository.edit(categoryId,cat);
+       boolean result=repository.edit(categoryId,cat);
+       this.notificar();
+       return result;
     }
     
    public boolean deleteCategory(Long id){
@@ -62,9 +63,6 @@ public class CategoryService extends Observado{
        public List<Category> findCategoriesByName(String name)throws Exception{
         return repository.findByName(name);
     }
-       /*
-       public boolean clearCategories(){
-           return repository.clearCategories();
-       }*/
+      
 }  
         
