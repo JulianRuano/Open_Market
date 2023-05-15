@@ -286,7 +286,7 @@ public class GUICategory extends javax.swing.JFrame {
 
         GUICategoriesFind instance = new GUICategoriesFind(this, true, categoryService);
         instance.setVisible(true);
-        // categoryService.addObservador(instance);
+         categoryService.addObservador(instance);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed

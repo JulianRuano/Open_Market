@@ -13,7 +13,7 @@ import reloj.frameworkobsobs.Observado;
  *
  * @author brayan majin, julian ruano
  */
-public class CategoryService {
+public class CategoryService extends Observado{
     
     
     public CategoryService(){
@@ -32,7 +32,9 @@ public class CategoryService {
             return false;
         }
         
-        return repository.save(newCategory);
+        boolean result=repository.save(newCategory);
+        this.notificar();
+        return result;
     }
     public boolean editCategory(Long categoryId,Category cat) {
         
@@ -46,8 +48,9 @@ public class CategoryService {
     }
     
    public boolean deleteCategory(Long id){
-      
-        return repository.delete(id);
+       boolean result =repository.delete(id);
+       this.notificar();
+        return result;
     }  
     public Category findCategoryById(Long id)throws Exception{
         return repository.findById(id);

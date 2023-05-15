@@ -48,12 +48,9 @@ public class Main {
         instance3.setVisible(true);
         productService.addObservador(instance3);
         
-        
-        //instance4.setVisible(true);
-        //categoryService.addObservador(instance4);
-         //ategoryAccessImplSockets cate=new CategoryAccessImplSockets() ;
-         //GUICategoriesFind instance4 = new GUICategoriesFind (null,false,cate);
-         //cate.addObservador(instance4);
+        GUICategoriesFind instance4 = new GUICategoriesFind (null,false,categoryService);
+        instance4.setVisible(true);
+        categoryService.addObservador(instance4);
         
     }
     

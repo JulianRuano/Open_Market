@@ -47,9 +47,9 @@ public class ProductService extends Observado {
         if (newProduct.getName().isBlank() ) {
             return false;
         }
-        
+        boolean result=repository.save(newProduct);
         this.notificar();
-        return repository.save(newProduct);
+        return result;
 
     }
 
@@ -76,8 +76,9 @@ public class ProductService extends Observado {
         return products;
     }
     public boolean deleteProduct(Long id)throws Exception {
+        boolean result=repository.delete(id);
         this.notificar();
-        return repository.delete(id);
+        return result;
        
     }
 
