@@ -29,6 +29,7 @@ public class CategoryService {
         if(newCategory.getName().isBlank()){
             return false;
         }
+        
         return repository.save(newCategory);
     }
     public boolean editCategory(Long categoryId,Category cat) {

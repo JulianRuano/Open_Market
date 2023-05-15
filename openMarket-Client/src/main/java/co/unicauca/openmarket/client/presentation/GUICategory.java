@@ -9,6 +9,10 @@ import co.unicauca.openmarket.client.domain.Category;
 import co.unicauca.openmarket.client.domain.service.CategoryService;
 import co.unicauca.openmarket.client.infra.Messages;
 import static co.unicauca.openmarket.client.infra.Messages.successMessage;
+import co.unicauca.openmarket.client.presentation.commands.OMAddCategoryCommand;
+import co.unicauca.openmarket.client.presentation.commands.OMDeleteCategoryCommand;
+import co.unicauca.openmarket.client.presentation.commands.OMEditCategoryCommand;
+import co.unicauca.openmarket.client.presentation.commands.OMInvoker;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,7 +22,7 @@ import javax.swing.JOptionPane;
 public class GUICategory extends javax.swing.JFrame {
      private CategoryService categoryService;
      private boolean addOption;
-   
+     private OMInvoker ominvoker;
      
        public GUICategory(){
            
@@ -26,6 +30,7 @@ public class GUICategory extends javax.swing.JFrame {
     public GUICategory(CategoryService categoryService) {
         initComponents();
         this.categoryService=categoryService;
+        ominvoker = new OMInvoker();
         stateInitial();
        
         
@@ -246,7 +251,11 @@ public class GUICategory extends javax.swing.JFrame {
             return;
            }
            if (Messages.showConfirmDialog("Está seguro que desea eliminar esta Categoria?", "Confirmación") == JOptionPane.YES_NO_OPTION) {
-                if(categoryService.deleteCategory(Long.valueOf(txtId.getText().trim()))){
+               Long idCategory = Long.valueOf(txtId.getText().trim());
+               OMDeleteCategoryCommand comm = new OMDeleteCategoryCommand(idCategory, categoryService);
+               ominvoker.addCommand(comm);
+               ominvoker.execute();  
+               if(comm.result()){
                       Messages.showMessageDialog("Categoria eliminada con exito", "Atención");
                        stateInitial();
                        cleanControls();
@@ -353,7 +362,11 @@ public class GUICategory extends javax.swing.JFrame {
         try{
             Long id=Long.parseLong(this.txtId.getText());
             String name=this.txtNombre.getText().trim();
-            if(categoryService.saveCategory(id,name)){
+            Category OCategory = new Category(id, name);
+            OMAddCategoryCommand comm = new OMAddCategoryCommand(OCategory,categoryService);
+            ominvoker.addCommand(comm);
+            ominvoker.execute();   
+            if(comm.result()){
                 Messages.showMessageDialog("Se grabo con exito","Atencion");
                 cleanControls();
                 stateInitial();
@@ -374,9 +387,13 @@ public class GUICategory extends javax.swing.JFrame {
             return;
         }
         Long categoryId=Long.parseLong(id);
-        Category cat=new Category();
-        cat.setName(this.txtNombre.getText().trim());
-        if(categoryService.editCategory(categoryId,cat)){
+        String name = this.txtNombre.getText().trim();
+        Category OCategory=new Category(categoryId,name);
+        OMEditCategoryCommand comm = new OMEditCategoryCommand(OCategory,categoryService);
+        ominvoker.addCommand(comm);
+        ominvoker.execute(); 
+              
+        if(comm.result()){
             Messages.showMessageDialog("Se editó con éxito", "Atención");
             cleanControls();
             stateInitial();

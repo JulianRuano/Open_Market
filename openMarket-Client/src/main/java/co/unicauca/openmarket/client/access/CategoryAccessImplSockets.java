@@ -15,14 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.Gson;
 import java.io.IOException;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +26,7 @@ import java.util.logging.Logger;
  */
 public class CategoryAccessImplSockets implements ICategoryAccess {
 
-     private OpenMarketSocket mySocket;
+     private final OpenMarketSocket mySocket;
      public CategoryAccessImplSockets() {
         mySocket = new OpenMarketSocket();
     }
@@ -64,7 +56,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
             } else {
                 //Encontró el customer
                 
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0}", jsonResponse);
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0})", jsonResponse);
                 bandera=true;
             }
         }
@@ -104,7 +96,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
             } else {
                 //Encontró la categoria
                 
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0}", jsonResponse);
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: ({0})", jsonResponse);
                 bandera=true;
             }
         }
@@ -144,7 +136,7 @@ public class CategoryAccessImplSockets implements ICategoryAccess {
             } else {
                 //Encontró la categoria
                 
-                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: {0}", requestJson);
+                Logger.getLogger(CategoryAccessImplSockets.class.getName()).log(Level.INFO, "Lo que va en el JSon: {0})", requestJson);
                 bandera=true;
             }
         }

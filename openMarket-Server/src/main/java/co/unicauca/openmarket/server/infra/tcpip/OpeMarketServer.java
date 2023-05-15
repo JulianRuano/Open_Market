@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package co.unicauca.openmarket.server.infra.tcpip;
-import co.unicauca.openmarket.client.access.CategoryRepository;
+
 import co.unicauca.openmarket.client.access.CategoryRepositoryArrays;
 import co.unicauca.openmarket.client.access.ProductRepositoryArrays;
 import co.unicauca.openmarket.domain.services.CategoryService;

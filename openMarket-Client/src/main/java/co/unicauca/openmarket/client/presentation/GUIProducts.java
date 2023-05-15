@@ -1,10 +1,14 @@
 package co.unicauca.openmarket.client.presentation;
 
-import co.unicauca.openmarket.client.domain.Category;
+
 import co.unicauca.openmarket.client.domain.Product;
 import co.unicauca.openmarket.client.domain.service.ProductService;
 import co.unicauca.openmarket.client.infra.Messages;
 import static co.unicauca.openmarket.client.infra.Messages.successMessage;
+import co.unicauca.openmarket.client.presentation.commands.OMAddProductCommand;
+import co.unicauca.openmarket.client.presentation.commands.OMDeleteProductCommand;
+import co.unicauca.openmarket.client.presentation.commands.OMEditProductCommand;
+import co.unicauca.openmarket.client.presentation.commands.OMInvoker;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,6 +19,7 @@ public class GUIProducts extends javax.swing.JFrame {
 
     private ProductService productService;
     private boolean addOption;
+    private OMInvoker ominvoker;
 
     /**
      * Creates new form GUIProducts
@@ -22,6 +27,7 @@ public class GUIProducts extends javax.swing.JFrame {
     public GUIProducts(ProductService productService) {
         initComponents();
         this.productService = productService;
+        ominvoker = new OMInvoker();
         stateInitial();
 
     }
@@ -236,8 +242,12 @@ public class GUIProducts extends javax.swing.JFrame {
             return;
         }
         Long productId = Long.parseLong(id);
+        OMDeleteProductCommand comm = new OMDeleteProductCommand(productId, productService);
+        ominvoker.addCommand(comm);
+        ominvoker.execute();  
+        
         if (Messages.showConfirmDialog("Está seguro que desea eliminar este producto?", "Confirmación") == JOptionPane.YES_NO_OPTION) {
-            if (productService.deleteProduct(productId)) {
+            if(comm.result()) {
                 Messages.showMessageDialog("Producto eliminado con éxito", "Atención");
                 stateInitial();
                 cleanControls();
@@ -332,7 +342,11 @@ public class GUIProducts extends javax.swing.JFrame {
             String name = txtName.getText().trim();
             String description = txtDescription.getText().trim();
             Long categoryId=Long.parseLong(this.txtCategory.getText());
-            if (productService.saveProduct(id,name, description, categoryId)) {
+            Product OProduct = new Product(id, name, description, 0,categoryId);
+            OMAddProductCommand comm = new OMAddProductCommand(OProduct, productService);
+            ominvoker.addCommand(comm);
+            ominvoker.execute();
+            if (comm.result()) {
                 Messages.showMessageDialog("Se grabó con éxito", "Atención");
                 cleanControls();
                 stateInitial();
@@ -356,8 +370,14 @@ public class GUIProducts extends javax.swing.JFrame {
         String name=txtName.getText();
         String description=this.txtDescription.getText();
         Long categoryId=Long.parseLong(this.txtCategory.getText());
+        
+        Product OProduct = new Product(productId, name, description, 0, categoryId);      
+        OMEditProductCommand comm = new OMEditProductCommand(OProduct, productService);
+        ominvoker.addCommand(comm);
+        ominvoker.execute();
+        
         try{
-             if (productService.editProduct(productId,name,description,categoryId)) {
+             if (comm.result()) {
                 Messages.showMessageDialog("Se editó con éxito", "Atención");
                 cleanControls();
                 stateInitial();
