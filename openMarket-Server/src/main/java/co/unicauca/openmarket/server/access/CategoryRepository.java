@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.unicauca.openmarket.client.access;
+package co.unicauca.openmarket.server.access;
 
-import co.unicauca.openmarket.client.domain.Category;
+import co.unicauca.openmarket.commons.domain.Category;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

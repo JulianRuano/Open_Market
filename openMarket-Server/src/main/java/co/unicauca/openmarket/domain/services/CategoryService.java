@@ -5,8 +5,8 @@
  */
 package co.unicauca.openmarket.domain.services;
 
-import co.unicauca.openmarket.client.access.ICategoryRepository;
-import co.unicauca.openmarket.client.domain.Category;
+import co.unicauca.openmarket.commons.domain.Category;
+import co.unicauca.openmarket.server.access.ICategoryRepository;
 import java.util.List;
 
 

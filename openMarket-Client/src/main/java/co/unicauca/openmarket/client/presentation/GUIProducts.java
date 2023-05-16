@@ -1,7 +1,7 @@
 package co.unicauca.openmarket.client.presentation;
 
 
-import co.unicauca.openmarket.client.domain.Product;
+
 import co.unicauca.openmarket.client.domain.service.ProductService;
 import co.unicauca.openmarket.client.infra.Messages;
 import static co.unicauca.openmarket.client.infra.Messages.successMessage;
@@ -9,6 +9,7 @@ import co.unicauca.openmarket.client.presentation.commands.OMAddProductCommand;
 import co.unicauca.openmarket.client.presentation.commands.OMDeleteProductCommand;
 import co.unicauca.openmarket.client.presentation.commands.OMEditProductCommand;
 import co.unicauca.openmarket.client.presentation.commands.OMInvoker;
+import co.unicauca.openmarket.commons.domain.Product;
 import javax.swing.JOptionPane;
 
 /**

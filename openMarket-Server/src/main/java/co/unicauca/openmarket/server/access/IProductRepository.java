@@ -1,8 +1,8 @@
 
-package co.unicauca.openmarket.client.access;
+package co.unicauca.openmarket.server.access;
 
-import co.unicauca.openmarket.client.domain.Category;
-import co.unicauca.openmarket.client.domain.Product;
+import co.unicauca.openmarket.commons.domain.Product;
+
 import java.util.List;
 
 

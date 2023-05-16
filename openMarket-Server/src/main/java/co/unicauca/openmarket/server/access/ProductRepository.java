@@ -1,7 +1,7 @@
-package co.unicauca.openmarket.client.access;
+package co.unicauca.openmarket.server.access;
 
-import co.unicauca.openmarket.client.domain.Category;
-import co.unicauca.openmarket.client.domain.Product;
+
+import co.unicauca.openmarket.commons.domain.Product;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -271,7 +269,6 @@ public class ProductRepository implements IProductRepository {
                     newProduct.setProductId(productRs.getLong("productId"));
                     newProduct.setName(productRs.getString("name"));
                     newProduct.setDescription(productRs.getString("description"));
-                    newProduct.setPrice(productRs.getDouble("price"));
                     products.add(newProduct);
                 }
             } else {

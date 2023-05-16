@@ -1,13 +1,12 @@
 package co.unicauca.openmarket.client.access;
 
 
-import co.unicauca.openmarket.client.domain.Category;
-import co.unicauca.openmarket.client.domain.Product;
+
 import co.unicauca.openmarket.client.infra.OpenMarketSocket;
+import co.unicauca.openmarket.commons.domain.Product;
 import co.unicauca.openmarket.commons.infra.JsonError;
 import co.unicauca.openmarket.commons.infra.Protocol;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.Gson;
@@ -287,8 +286,10 @@ public class ProductAccessImplSockets implements IProductAccess {
      */
     private String doSaveProductRequestJson(Product newProduct) {
         Protocol protocol = new Protocol();
+        
         protocol.setResource("product");
         protocol.setAction("post");
+        
         protocol.addParameter("productId",newProduct.getProductId().toString());
         protocol.addParameter("name",newProduct.getName());
         protocol.addParameter("description", newProduct.getDescription());
@@ -377,6 +378,7 @@ public class ProductAccessImplSockets implements IProductAccess {
         Protocol protocol = new Protocol();
         protocol.setResource("product");
         protocol.setAction("delete");
+        
         protocol.addParameter("id", id.toString());
        
         Gson gson = new Gson();

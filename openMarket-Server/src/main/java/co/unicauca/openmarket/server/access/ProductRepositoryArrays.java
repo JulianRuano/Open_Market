@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package co.unicauca.openmarket.client.access;
+package co.unicauca.openmarket.server.access;
 
-import co.unicauca.openmarket.client.domain.Product;
+import co.unicauca.openmarket.commons.domain.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -5,8 +5,8 @@
  */
 package co.unicauca.openmarket.domain.services;
 
-import co.unicauca.openmarket.client.access.IProductRepository;
-import co.unicauca.openmarket.client.domain.Product;
+import co.unicauca.openmarket.commons.domain.Product;
+import co.unicauca.openmarket.server.access.IProductRepository;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public class ProductService {
         this.repo = repo;
     }
      
-      public synchronized boolean save(Product newProduct) {
+    public synchronized boolean save(Product newProduct) {
         return repo.save(newProduct);
     }
     

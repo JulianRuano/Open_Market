@@ -6,6 +6,7 @@
  */
 package co.unicauca.serversocket.loadbalancerserver.logic;
 
+
 import co.unicauca.serversocket.loadbalancerserver.infra.ILoadBalancerConnection;
 import co.unicauca.serversocket.loadbalancerserver.infra.LoadBalancerSocket;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import co.unicauca.serversocket.loadbalancerserver.logic.serversscheduling.IServerScheduler;
 import co.unicauca.strategyserver.infra.ServerHandler;
+import co.unicauca.serversocket.loadbalancerserver.logic.servermanagement.servicemeasurement.TimeMeasurer;
 
 /**
  *
@@ -25,6 +27,7 @@ public class LoadBalancerHandler extends ServerHandler {
      */
     
     private static IServerScheduler serverScheduler;
+    TimeMeasurer timer = new TimeMeasurer();
     
     public LoadBalancerHandler(){
         super();
@@ -50,9 +53,16 @@ public class LoadBalancerHandler extends ServerHandler {
             ILoadBalancerConnection conn = this.getLoadBalancerConnection();
             conn.setServer(serverScheduler.selectServer(this.getSocket()));
             conn.connect();
-            response = conn.sendRequest(requestJson);
+            
+            
+            long startTime = System.nanoTime();
+            response = conn.sendRequest(requestJson);         
+            long endTime = System.nanoTime();
+            timer.addTime(endTime - startTime);
+                      
             //this.respond(conn.sendRequest(requestJson));
             System.out.println("Pasando por el balanceador ...");
+            System.out.println("Tiempo promedio de respuesta:"+timer.getAverageResponse());
             conn.closeStream();
             conn.disconnect();
         } catch (IOException ex) {

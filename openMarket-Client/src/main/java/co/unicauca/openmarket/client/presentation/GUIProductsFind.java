@@ -5,12 +5,10 @@
  */
 package co.unicauca.openmarket.client.presentation;
 
-import co.unicauca.openmarket.client.domain.Product;
+import co.unicauca.openmarket.commons.domain.Product;
 import co.unicauca.openmarket.client.domain.service.ProductService;
 import static co.unicauca.openmarket.client.infra.Messages.successMessage;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import reloj.frameworkobsobs.Observador;

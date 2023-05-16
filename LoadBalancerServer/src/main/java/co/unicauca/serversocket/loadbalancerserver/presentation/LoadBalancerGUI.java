@@ -107,6 +107,6 @@ public class LoadBalancerGUI extends javax.swing.JFrame implements Observer {
     public void update(Object o) {
         IServerScheduler scheduler = (IServerScheduler)o;
         this.setVisible(true);
-        this.jTextArea4.append("\nHost:"+scheduler.getActualServer().getHost()+" Port:"+scheduler.getActualServer().getPort());
+        this.jTextArea4.append("\nHost:"+scheduler.getActualServer().getHost()+" Port:"+scheduler.getActualServer().getPort()+" Tiempo de respuesta: ");
     }
 }

@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 package co.unicauca.openmarket.server.infra.tcpip;
-import co.unicauca.openmarket.client.domain.Category;
-import co.unicauca.openmarket.client.domain.Product;
+import co.unicauca.openmarket.commons.domain.Category;
+import co.unicauca.openmarket.commons.domain.Product;
 import co.unicauca.openmarket.commons.infra.Protocol;
 import co.unicauca.openmarket.domain.services.CategoryService;
 import co.unicauca.strategyserver.infra.ServerHandler;
@@ -100,7 +100,7 @@ public class OpenMarketHandler extends ServerHandler {
                 }
                 if (protocolRequest.getAction().equals("listAllProduct")){
                     // Editar un producto
-                    response = processListAllProduct(protocolRequest);
+                    response = processListAllProduct();
                 }
                 break;
              }
@@ -271,8 +271,8 @@ public class OpenMarketHandler extends ServerHandler {
       return objectToJSON(productos);
     }
 
-    private String processListAllProduct(Protocol protocolRequest) {
-       List<Product>productos;
+    private String processListAllProduct() {
+      List<Product>productos;
       productos=serviceProduc.findAll();
       return objectToJSON(productos);
     }

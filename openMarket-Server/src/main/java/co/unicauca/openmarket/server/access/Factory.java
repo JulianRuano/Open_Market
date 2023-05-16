@@ -1,4 +1,4 @@
-package co.unicauca.openmarket.client.access;
+package co.unicauca.openmarket.server.access;
 
 import co.unicauca.openmarket.commons.infra.Utilities;
 
