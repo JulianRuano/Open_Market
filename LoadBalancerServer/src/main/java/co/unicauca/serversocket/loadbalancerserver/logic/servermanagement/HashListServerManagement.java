@@ -18,9 +18,9 @@ public class HashListServerManagement implements IServerManagement {
     
     public HashListServerManagement(){
         serverList = new HashMap<>();
-        serverList.put(0, new ServerInfo("localhost",5001));
-        serverList.put(1, new ServerInfo("localhost",5002)); 
-        serverList.put(2, new ServerInfo("localhost",5003)); 
+        serverList.put(0, new ServerInfo("localhost",5003));
+        serverList.put(1, new ServerInfo("localhost",5004)); 
+        serverList.put(2, new ServerInfo("localhost",5006)); 
     }
     
     @Override

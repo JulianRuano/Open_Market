@@ -36,8 +36,8 @@ public class CategoryRepository implements ICategoryRepository {
             if (newCategory == null || newCategory.getCategoryId()==null) {
                 return false;
             }
-            String sql = "INSERT INTO categories ( name) "
-                    + "VALUES ( ?)";
+            String sql = "INSERT INTO categories ( categoryId,name) "
+                    + "VALUES ( ?,?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setLong(1, newCategory.getCategoryId());
             pstmt.setString(2, newCategory.getName());
@@ -81,7 +81,7 @@ public class CategoryRepository implements ICategoryRepository {
         }
     }
     
- public boolean clearCategories() {
+    public boolean clearCategories() {
     try {
         String sql = "DELETE FROM categories";
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -133,7 +133,7 @@ public class CategoryRepository implements ICategoryRepository {
     @Override
     public boolean delete(Long id) {
         try {
-             if (id <= 0) {
+            if (id <= 0) {
                 return false;
             }
              String sql = "DELETE FROM categories "
@@ -151,7 +151,7 @@ public class CategoryRepository implements ICategoryRepository {
     @Override
     public Category findById(Long id) {
         try {
-             JOptionPane.showMessageDialog(null, "soy el ide: "+id);
+            JOptionPane.showMessageDialog(null, "soy el ide: "+id);
             String sql = "SELECT * FROM categories "
                     + "WHERE categoryId = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
