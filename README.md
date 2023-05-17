@@ -1,5 +1,6 @@
 # Cliente servidor
-
+## Brayan Majin Gaviria
+## Julian Ruano Majin
 ### Video de compilación y ejecucion  de la aplicacíon:
 [compilation y execution](https://drive.google.com/file/d/1UXcThsjOcqyZ-TecR0YHwblmuOWC9cuk/view)
 ### Video del balanceador de carga:
