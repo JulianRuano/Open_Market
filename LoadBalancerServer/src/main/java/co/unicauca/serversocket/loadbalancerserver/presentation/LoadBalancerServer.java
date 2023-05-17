@@ -22,7 +22,7 @@ public class LoadBalancerServer {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        ServerSocketMultiThread myServer = new ServerSocketMultiThread(5005);
+        ServerSocketMultiThread myServer = new ServerSocketMultiThread(5007);
         IServerScheduler scheduler = new RoundRobinServerScheduler(new HashListServerManagement());
         ((RoundRobinServerScheduler)scheduler).addObserver(new LoadBalancerGUI());
         LoadBalancerHandler myHandler = new LoadBalancerHandler();

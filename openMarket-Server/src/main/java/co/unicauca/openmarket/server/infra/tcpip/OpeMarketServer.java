@@ -5,7 +5,6 @@
  */
 package co.unicauca.openmarket.server.infra.tcpip;
 
-import co.unicauca.openmarket.server.access.CategoryRepository;
 import co.unicauca.openmarket.server.access.CategoryRepositoryArrays;
 import co.unicauca.openmarket.server.access.ProductRepositoryArrays;
 import co.unicauca.openmarket.domain.services.CategoryService;

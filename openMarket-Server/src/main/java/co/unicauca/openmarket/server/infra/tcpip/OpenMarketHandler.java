@@ -202,7 +202,7 @@ public class OpenMarketHandler extends ServerHandler {
         producto.setProductId( Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
         producto.setName( protocolRequest.getParameters().get(1).getValue());
         producto.setDescription(protocolRequest.getParameters().get(2).getValue());
-        producto.setCategoryId(Long.parseLong(protocolRequest.getParameters().get(0).getValue()));
+        producto.setCategoryId(Long.parseLong(protocolRequest.getParameters().get(3).getValue()));
        
         boolean response = serviceProduc.edit(producto);
         String respuesta=String.valueOf(response);
